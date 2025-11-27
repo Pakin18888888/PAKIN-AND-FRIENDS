@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-[RequireComponent(typeof(BoxCollider))]
+[RequireComponent(typeof(BoxCollider2D))]
 public class stuff : Identity
 {
     public TMP_Text interactionTextUI;
