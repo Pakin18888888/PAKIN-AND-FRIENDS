@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 
 [RequireComponent(typeof(BoxCollider))]
-public abstract class Stuff : Identity
+public abstract class stuff : Identity
 {
     public TMP_Text interactionTextUI;
     protected Collider2D _collider;
