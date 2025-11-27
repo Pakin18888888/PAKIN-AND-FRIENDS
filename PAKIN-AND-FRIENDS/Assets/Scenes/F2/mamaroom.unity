@@ -1308,9 +1308,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: 
-  PositionX: 0
-  PositionY: 0
-  interactionTextUI: {fileID: 0}
+  PositionX: 2
+  PositionY: 2
+  interactionTextUI: {fileID: 1038806801}
   isHide: 0
 --- !u!61 &2041814149
 BoxCollider2D:
