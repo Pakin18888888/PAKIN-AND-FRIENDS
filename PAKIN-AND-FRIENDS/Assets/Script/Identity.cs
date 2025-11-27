@@ -13,7 +13,7 @@ public class Identity : MonoBehaviour
     }
     protected virtual void SetupIdentity()
     {
-        transform.position = new Vector3(PositionX, transform.position.y, PositionY);
+        transform.position = new Vector3(PositionX, transform.position.y,0);
     }
     // Update is called once per frame
     void Update()
