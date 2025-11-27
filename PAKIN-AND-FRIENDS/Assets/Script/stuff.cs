@@ -1,13 +1,14 @@
 using UnityEngine;
 using TMPro;
 
-public abstract class stuff : Identity
+[RequireComponent(typeof(BoxCollider2D))]
+public class stuff : Identity
 {
     public TMP_Text interactionTextUI;
     protected Collider2D _collider;
     public bool isHide;
 
-    public void Setup()
+    protected override void SetupIdentity()
     {
         interactionTextUI = GetComponentInChildren<TMP_Text>();
         _collider = GetComponent<Collider2D>();
@@ -27,10 +28,7 @@ public abstract class stuff : Identity
 
     float GetDistancePlayer()
     {
-        // คุณต้องแก้ส่วนนี้ให้ถูกตามโปรเจคคุณ
-        // ตัวอย่าง: หา Player จาก tag
         Transform player = GameObject.FindGameObjectWithTag("Player").transform;
-
-        return Vector3.Distance(transform.position, player.position);
+        return Vector2.Distance(transform.position, player.position);
     }
 }
