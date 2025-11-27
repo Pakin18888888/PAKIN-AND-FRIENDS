@@ -16,7 +16,7 @@ public class stuff : Identity
 
     void Update()
     {
-        if (GetDistancePlayer() > 2f)
+        if (GetDistancePlayer() > 4f)
         {
             interactionTextUI.gameObject.SetActive(false);
         }
