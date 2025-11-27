@@ -5,13 +5,13 @@ using TMPro;
 public abstract class Stuff : Identity
 {
     public TMP_Text interactionTextUI;
-    protected Collider _collider;
+    protected Collider2D _collider;
     public bool isHide;
 
     public override void Setup()
     {
         interactionTextUI = GetComponentInChildren<TMP_Text>();
-        _collider = GetComponent<Collider>();
+        _collider = GetComponent<Collider2D>();
     }
 
     void Update()
