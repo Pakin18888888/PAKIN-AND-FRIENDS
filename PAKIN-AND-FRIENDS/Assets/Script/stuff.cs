@@ -1,14 +1,13 @@
 using UnityEngine;
 using TMPro;
 
-[RequireComponent(typeof(BoxCollider))]
 public abstract class stuff : Identity
 {
     public TMP_Text interactionTextUI;
     protected Collider2D _collider;
     public bool isHide;
 
-    public override void Setup()
+    public void Setup()
     {
         interactionTextUI = GetComponentInChildren<TMP_Text>();
         _collider = GetComponent<Collider2D>();
