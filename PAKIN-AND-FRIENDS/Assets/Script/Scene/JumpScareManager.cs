@@ -1,18 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class JumpScareManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public string scareID;
+
     void Start()
     {
-        
+        if (GameManager.Instance.sceneState.playedJumpScare.Contains(scareID))
+        {
+            DisableScare();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PlayScare()
     {
-        
+        DoJumpScare();
+        GameManager.Instance.sceneState.playedJumpScare.Add(scareID);
+    }
+
+    void DoJumpScare()
+    {
+        // ใส่อนิเมชันหรือเสียงของ jumpscare
+        Debug.Log("PLAY JUMPSCARE: " + scareID);
+    }
+
+    void DisableScare()
+    {
+        // ปิดตัว trigger ไม่ให้เล่นอีก
+        gameObject.SetActive(false);
     }
 }
