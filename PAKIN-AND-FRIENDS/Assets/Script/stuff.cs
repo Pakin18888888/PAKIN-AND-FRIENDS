@@ -7,10 +7,24 @@ public class stuff : MonoBehaviour
     public TextMeshProUGUI GJ;
     public GameObject GJ1;
     public bool pickUpAllowed;
+    public GameObject interactionTextUI;
+
+     float GetDistancePlayer()
+    {
+        // สมมติ Player มี tag ว่า "Player"
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        if (player == null)
+            return Mathf.Infinity;
+
+        return Vector3.Distance(player.transform.position, transform.position);
+    }
 
     void Start()
     {
         GJ.gameObject.SetActive(false);
+        GJ1.gameObject.SetActive(false);
+        
         pickUpAllowed = false;
     }
 

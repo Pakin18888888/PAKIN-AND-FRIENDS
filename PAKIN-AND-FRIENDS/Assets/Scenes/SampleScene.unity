@@ -622,6 +622,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5944065071531319199, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5944065071531319199, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5944065071531319199, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5944065071531319199, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6088588945290487277, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
       propertyPath: m_Name
       value: Enemy
