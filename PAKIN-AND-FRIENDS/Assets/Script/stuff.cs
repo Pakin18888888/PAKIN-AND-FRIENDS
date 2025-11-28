@@ -16,12 +16,6 @@ public class stuff : MonoBehaviour
 
     void Update()
     {
-
-        if (GetDistancePlayer() > 4f)
-        {
-            interactionTextUI.gameObject.SetActive(false);
-        }
-
         if(pickUpAllowed && Input.GetKeyDown(KeyCode.E)){
 
             bool isActive = !GJ1.activeSelf; 
@@ -51,7 +45,10 @@ public class stuff : MonoBehaviour
     {
         if(collision.gameObject.tag == "Player")
         {
-            GJ.gameObject.SetActive(false);
+            if(GJ != null)
+            {
+                GJ.gameObject.SetActive(false);
+            }
             pickUpAllowed = false;
         }
     }

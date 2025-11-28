@@ -6,11 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
     path: Assets/Scenes/F2/meroom.unity
     guid: 86002801cd7f3d841be4eea99dc7d631
+  - enabled: 1
+    path: Assets/Scenes/SampleScene.unity
+    guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
     path: Assets/Scenes/F2/proom.unity
     guid: 8eba5172b4418be47ad6c495c51c856d
@@ -23,6 +23,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/F2/bathroom.unity
     guid: 028258f8fd523784ebe8766f323cc170
+  - enabled: 1
+    path: Assets/Scenes/F1/LivingRoom.unity
+    guid: 0b4ddfa93014f4c4dbe67e51f39078ee
+  - enabled: 1
+    path: Assets/Scenes/F1/bathroom1.unity
+    guid: 84950167f9d53a74cb92f40052a437a4
+  - enabled: 1
+    path: Assets/Scenes/F1/kitchenroom.unity
+    guid: 41af42d1c4fe0e342af30ce73bf4b984
+  - enabled: 1
+    path: Assets/Scenes/F1/storeroom.unity
+    guid: 70ff1b0cd9d65164e9072aea5f468ca3
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 5c8356ce105db03409b4120fc660a195, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 97dc693d594724d4fa039385336ad037, type: 3}

@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public int flashlightBattery = 100;
 
     public Inventory inventory;
+    public static Player Instance;
 
     void Start()
     {
@@ -20,8 +21,11 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    void Update()
+   void Update()
     {
+        // เช็ค Instance เพื่อกัน Error ถ้าตัวนี้ถูกทำลายไปแล้ว
+        if (Instance != this) return; 
+        
         rb.velocity = moveInput * moveSpeed;
     }
 
@@ -43,20 +47,20 @@ public class Player : MonoBehaviour
         animator.SetFloat("InputY", moveInput.y);
     }
 
-    // ---------------------------
-    // SAVE / LOAD
-    // ---------------------------
-    public void SaveState()
-{
-    PlayerPrefs.SetFloat("px", transform.position.x);
-    PlayerPrefs.SetFloat("py", transform.position.y);
-}
+void Awake()
+    {
+        // ระบบ Singleton: ถ้ามี Player อยู่แล้ว ให้ทำลายตัวนี้ทิ้ง (ป้องกันตัวซ้ำ)
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return; 
+        }
 
-public void LoadState()
-{
-    float x = PlayerPrefs.GetFloat("px", transform.position.x);
-    float y = PlayerPrefs.GetFloat("py", transform.position.y);
+        // ถ้ายังไม่มี ให้ตัวนี้เป็นตัวหลัก และห้ามทำลายเมื่อเปลี่ยนฉาก
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
 
-    transform.position = new Vector2(x, y);
-}
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+    }
 }
