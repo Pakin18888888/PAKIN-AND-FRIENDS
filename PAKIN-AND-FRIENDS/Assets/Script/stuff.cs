@@ -7,7 +7,6 @@ public class stuff : MonoBehaviour
     public TextMeshProUGUI GJ;
     public GameObject GJ1;
     public bool pickUpAllowed;
-    public GameObject interactionTextUI;
 
      float GetDistancePlayer()
     {
@@ -32,7 +31,9 @@ public class stuff : MonoBehaviour
     {
         if(pickUpAllowed && Input.GetKeyDown(KeyCode.E)){
 
-            bool isActive = !GJ1.activeSelf; 
+            bool isActive = !GJ1.activeSelf;
+            bool isActive1 = !GJ.gameObject.activeSelf;
+            GJ.gameObject.SetActive(isActive1);
             GJ1.SetActive(isActive);
 
             if (isActive)
