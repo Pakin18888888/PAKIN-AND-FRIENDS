@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.InputSystem; // จำเป็นต้องใช้สำหรับ Keyboard.current
 
 public class Player : MonoBehaviour
 {
@@ -9,8 +9,17 @@ public class Player : MonoBehaviour
     private Vector2 moveInput;
     private Animator animator;
 
+    public int hp = 100;
+    public int flashlightBattery = 100;
+
+    public Inventory inventory;
+
     public static Player Instance;
-    public LayerMask InteractLayer;
+    
+    public bool canMove = true;
+
+    // ตัวแปรจำว่ายืนหน้าตู้ไหน
+    [HideInInspector] public TriggerLocker currentLocker;
 
     void Awake()
     {
@@ -31,52 +40,71 @@ public class Player : MonoBehaviour
     {
         if (Instance != this) return;
 
-        rb.velocity = moveInput * moveSpeed;
+        // 1. ส่วนการเดิน (Move)
+        if (canMove)
+            rb.velocity = moveInput * moveSpeed;
+        else
+            rb.velocity = Vector2.zero;
+
+        UpdateAnimation();
+
+        // 2. ส่วนการกด E (Interact) - เขียนเช็กตรงนี้เลยครับ
+        // Keyboard.current.eKey.wasPressedThisFrame มีค่าเท่ากับ Input.GetKeyDown(KeyCode.E) แต่ใช้กับระบบใหม่
+        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame) 
+        {
+            TryInteract();
+        }
     }
 
-    // Input System
-    public void Move(InputAction.CallbackContext context)
+    void UpdateAnimation()
     {
-        Vector2 current = context.ReadValue<Vector2>();
-        moveInput = current;
+        bool isMoving = moveInput.magnitude > 0;
+        animator.SetBool("IsWalking", isMoving);
 
-        animator.SetBool("IsWalking", current.magnitude > 0);
-        animator.SetFloat("InputX", moveInput.x);
-        animator.SetFloat("InputY", moveInput.y);
-
-       
-
-
-        if (context.canceled)
+        if (isMoving)
         {
+            animator.SetFloat("InputX", moveInput.x);
+            animator.SetFloat("InputY", moveInput.y);
+
             animator.SetFloat("LastInputX", moveInput.x);
             animator.SetFloat("LastInputY", moveInput.y);
         }
     }
 
-    // กด E
-    public void Interact(InputAction.CallbackContext context)
+    // ฟังก์ชันรับค่าเดินจาก Input System (ไม่ต้องแก้)
+    public void Move(InputAction.CallbackContext context)
     {
-        Debug.Log("Interact");
-
-        if (!context.started) return;
-
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 1.5f, InteractLayer);
-
-        Debug.Log("HIT COUNT = " + hits.Length);
-
-        foreach (Collider2D hit in hits)
+        if (!canMove)
         {
-            Debug.Log("HIT OBJECT = " + hit.name);
+            moveInput = Vector2.zero;
+            return;
+        }
 
-            TriggerLocker locker = hit.GetComponent<TriggerLocker>();
+        if (context.performed)
+            moveInput = context.ReadValue<Vector2>();
+        else if (context.canceled)
+            moveInput = Vector2.zero;
+    }
 
-            if (locker != null)
-            {
-                Debug.Log("FOUND TriggerLocker");
-                locker.OnPlayerInteracting();
-                break;
-            }
+    // ฟังก์ชันสั่งงานตู้ (แยกออกมาเพื่อให้เรียกใช้ง่ายๆ)
+    public void TryInteract()
+    {
+        // ถ้าเรายืนอยู่หน้าตู้ (ตัวแปรไม่เป็น null) ให้สั่งงานตู้นั้นเลย
+        if (currentLocker != null)
+        {
+            currentLocker.OnPlayerInteracting();
+        }
+    }
+
+    public void SetMovement(bool status)
+    {
+        canMove = status;
+
+        if (!status)
+        {
+            moveInput = Vector2.zero;
+            rb.velocity = Vector2.zero;
+            animator.SetBool("IsWalking", false);
         }
     }
 }

@@ -2,93 +2,108 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement;
 
 public class TriggerLocker : MonoBehaviour
 {
-    private GameObject player;          // Player ตัวจริงใน Hierarchy
-    public TextMeshProUGUI promptText; // Text "Press E"
+    private GameObject player;
+    public TextMeshProUGUI promptText;
 
     private bool playerInRange = false;
-    private bool isHidden = false;
-  
+    private bool isLocked = false;
+
+    // จุดซ่อน + จุดออกจากตู้
+    public Transform hidePoint;
+    public Transform exitPoint;
 
     void Start()
     {
-        player = Player.Instance.gameObject; 
+        if (Player.Instance != null)
+        {
+            player = Player.Instance.gameObject;
+        }
+
         if (promptText != null)
             promptText.gameObject.SetActive(false);
     }
 
-    void Update()
+    void UpdatePrompt()
     {
-        if (playerInRange && Input.GetKeyDown(KeyCode.E))
+        if (!promptText) return;
+
+        if (!playerInRange)
         {
-            ToggleHide();
+            promptText.gameObject.SetActive(false);
+            return;
         }
+
+        promptText.gameObject.SetActive(true);
+        promptText.text = isLocked ? "[E] Unlock" : "[E] Lock";
     }
 
-    void ToggleHide()
+    void ToggleLock()
     {
-        isHidden = !isHidden;
+        isLocked = !isLocked;
 
-        SpriteRenderer sr = player.GetComponent<SpriteRenderer>();
-        Animator anim = player.GetComponent<Animator>();
-        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
-
-        if (isHidden)
+        // ล็อกตัวผู้เล่น
+        if (Player.Instance != null)
         {
-            // ซ่อน Player
-            if (sr) sr.enabled = false;
-            if (anim) anim.enabled = false;
-            if (rb) rb.velocity = Vector2.zero;
+            Player.Instance.SetMovement(!isLocked);
+            SpriteRenderer sp = player.GetComponent<SpriteRenderer>();
 
-            if (promptText)
-                promptText.text = "[E] Reveal";
+            if (isLocked)
+            {
+                // เข้าไปในตู้
+                if (hidePoint != null)
+                    Player.Instance.transform.position = hidePoint.position;
+                    sp.enabled = false;
+            }
+            else
+            {
+                // ออกจากตู้
+                if (exitPoint != null)
+                    Player.Instance.transform.position = exitPoint.position;
+                    sp.enabled = true;
+            }
         }
-        else
-        {
-            // แสดง Player กลับ
-            if (sr) sr.enabled = true;
-            if (anim) anim.enabled = true;
 
-            if (promptText)
-                promptText.text = "[E] Hide";
-        }
+        UpdatePrompt();
     }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject == player)
+        // เช็คว่าสิ่งที่ชนคือ Player
+        if (col.gameObject.CompareTag("Player") || (player != null && col.gameObject == player))
         {
             playerInRange = true;
+            UpdatePrompt();
 
-            if (promptText)
+            // บอก Player ว่า "ฉันคือตู้ที่เธออยู่ใกล้นะ"
+            if (Player.Instance != null)
             {
-                promptText.text = "[E] Hide";
-                promptText.gameObject.SetActive(true);
+                Player.Instance.currentLocker = this;
             }
         }
     }
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.gameObject == player)
+        // เช็คว่าสิ่งที่ชนคือ Player
+        if (col.gameObject.CompareTag("Player") || (player != null && col.gameObject == player))
         {
             playerInRange = false;
+            UpdatePrompt();
 
-            if (promptText)
-                promptText.gameObject.SetActive(false);
+            // เมื่อเดินออก ให้ล้างค่าใน Player ทิ้ง (ถ้าตู้นั้นยังเป็นตู้นี้อยู่)
+            if (Player.Instance != null && Player.Instance.currentLocker == this)
+            {
+                Player.Instance.currentLocker = null;
+            }
         }
     }
 
     public void OnPlayerInteracting()
     {
-        if(playerInRange)
-        {
-            ToggleHide();
-        }
+        if (playerInRange)
+            ToggleLock();
     }
-
-   
 }
