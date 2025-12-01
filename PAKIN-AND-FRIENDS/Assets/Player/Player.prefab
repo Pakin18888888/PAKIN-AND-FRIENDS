@@ -127,6 +127,8 @@ MonoBehaviour:
   hp: 100
   flashlightBattery: 100
   inventory: {fileID: 0}
+  canMove: 1
+  currentLocker: {fileID: 0}
 --- !u!60 &7041944093254762581
 PolygonCollider2D:
   m_ObjectHideFlags: 0
