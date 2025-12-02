@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 1225809859537172914, guid: 3f31c3ed082e30946ad307736f130e58, type: 3}
-  detectRange: 20
+  detectRange: 50
   speed: 3
   disappearRange: 30
   jumpScareDistance: 0.8
