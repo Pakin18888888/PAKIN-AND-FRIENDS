@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 3
   m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
   m_Color: {r: 0.990566, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -166,3 +166,9 @@ MonoBehaviour:
   speed: 3
   disappearRange: 30
   jumpScareDistance: 0.8
+  jumpScareUI: {fileID: 0}
+  jumpScareSound: {fileID: 0}
+  mainCam: {fileID: 0}
+  shakeAmount: 0.2
+  shakeDuration: 0.3
+  jumpScareDisplayTime: 1
