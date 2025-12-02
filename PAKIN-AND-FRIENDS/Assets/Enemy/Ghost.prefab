@@ -113,7 +113,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!70 &-3003517629581396092
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -143,7 +143,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bd49bd91efe85a4caa45654e40e506c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 1225809859537172914, guid: 3f31c3ed082e30946ad307736f130e58, type: 3}
+  Player: {fileID: 0}
   detectRange: 50
   speed: 3
   disappearRange: 30

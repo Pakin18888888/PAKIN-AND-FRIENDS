@@ -14,9 +14,12 @@ public class GhostAI2D : MonoBehaviour
     public float shakeAmount = 0.2f;
     public float shakeDuration = 0.3f;
     public float jumpScareDisplayTime = 1f;
+    private Vector3 lastPos;
+    Rigidbody2D rb;
 
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         if (Player == null)
         {
             Player = GameObject.FindGameObjectWithTag("Player")?.transform;
@@ -24,41 +27,39 @@ public class GhostAI2D : MonoBehaviour
                 Debug.LogError("GhostAI2D: NO PLAYER FOUND! Set Player tag correctly.");
         }
     }
-
-    void Update()
+    void OnDrawGizmos()
+{
+    if (Player != null)
     {
-        if (Player == null)
-            return;
-
-        // Lock Z axis
-        Vector3 ghostPos = transform.position;
-        ghostPos.z = 0;
-        transform.position = ghostPos;
-
-        Vector3 playerPos = Player.position;
-        playerPos.z = 0;
-
-        float dist = Vector2.Distance(ghostPos, playerPos);
-
-        // Debug
-        Debug.Log("DIST = " + dist);
-
-        if (dist <= detectRange)
-        {
-            Vector2 newPos = Vector2.MoveTowards(ghostPos, playerPos, speed * Time.deltaTime);
-            transform.position = new Vector3(newPos.x, newPos.y, ghostPos.z);
-        }
-
-        if (dist <= jumpScareDistance)
-        {
-            Debug.Log("Ghost TOUCH Player!");
-            Destroy(gameObject);
-        }
-
-        if (dist >= disappearRange)
-        {
-            Debug.Log("Ghost disappear because distance = " + dist);
-            Destroy(gameObject);
-        }
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, Player.position);
     }
+}
+
+    void FixedUpdate()
+{
+    if (Player == null) return;
+
+    Vector2 ghostPos = rb.position;
+    Vector2 playerPos = Player.position;
+
+    float dist = Vector2.Distance(ghostPos, playerPos);
+
+    if (dist <= detectRange)
+    {
+        Vector2 newPos = Vector2.MoveTowards(ghostPos, playerPos, speed * Time.fixedDeltaTime);
+        rb.MovePosition(newPos);
+    }
+
+    if (dist <= jumpScareDistance)
+    {
+        Debug.Log("Ghost TOUCH Player!");
+    }
+
+    if (dist >= disappearRange)
+    {
+        Destroy(gameObject);
+    }
+}
+    
 }
