@@ -515,7 +515,7 @@ MonoBehaviour:
   GJ1: {fileID: 1331911986}
   pickUpAllowed: 0
   hasGhost: 1
-  isJumpScareCabinet: 0
+  isJumpScareCabinet: 1
   ghostSpawned: 0
   ghostPrefab: {fileID: 6088588945290487277, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
   ghostSpawnDistance: 8
