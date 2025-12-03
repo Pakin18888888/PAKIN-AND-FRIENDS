@@ -242,7 +242,7 @@ MonoBehaviour:
   mainCam: {fileID: 1683175798}
   shakeAmount: 0.2
   shakeDuration: 0.3
-  jumpScareDisplayTime: 1
+  jumpScareDisplayTime: 2
 --- !u!1 &1395501463
 GameObject:
   m_ObjectHideFlags: 0

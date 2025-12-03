@@ -20,16 +20,8 @@ public void PlayJumpScare()
 
 void Awake() 
     {
-        // 2. กำหนด Instance ให้เป็นตัวมันเองเมื่อ Scene เริ่มต้น
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            // ป้องกันการมี Manager ซ้ำซ้อน
-            Destroy(gameObject); 
-        }
+        Instance = this;
+        
     }
 IEnumerator JumpScareRoutine()
 {

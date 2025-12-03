@@ -622,6 +622,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1181201851490782408, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392366104097725290, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
+      propertyPath: mainCam
+      value: 
+      objectReference: {fileID: 519420031}
+    - target: {fileID: 2392366104097725290, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
+      propertyPath: jumpScareUI
+      value: 
+      objectReference: {fileID: 997764559805701813}
+    - target: {fileID: 2421395289858047071, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2421395289858047071, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: a028889780af99f41b7c01077a26b5e7, type: 3}
     - target: {fileID: 5944065071531319199, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
       propertyPath: m_Color.b
       value: 0
@@ -682,15 +702,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6408802160927333761, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
+      propertyPath: jumpScareSound
+      value: 
+      objectReference: {fileID: 997764559805701812}
     - target: {fileID: 7343495078116432881, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 677072049}
+    - target: {fileID: 8030538408199916948, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1912207823, guid: 7466e2fd7bd0df0448688e9daf10d2de, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
+--- !u!82 &997764559805701812 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 2421395289858047071, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
+  m_PrefabInstance: {fileID: 997764559805701811}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &997764559805701813 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1181201851490782408, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
+  m_PrefabInstance: {fileID: 997764559805701811}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1997962264506900206
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -197,7 +197,11 @@ public class GhostAI2D : MonoBehaviour // ✅ สืบทอดจาก MonoBe
 
         // 2) เล่น Jumpscare
         if (jumpScareUI != null) jumpScareUI.SetActive(true);
-        if (jumpScareSound != null) jumpScareSound.Play();
+        if (jumpScareSound != null)
+            Destroy(gameObject, jumpScareSound.clip.length);
+        else
+            Destroy(gameObject);
+
 
         // 3) Camera Shake
         if (mainCam != null)
@@ -207,7 +211,7 @@ public class GhostAI2D : MonoBehaviour // ✅ สืบทอดจาก MonoBe
             while (shakeTimer < shakeDuration)
             {
                 mainCam.transform.localPosition = originalPos + (Vector3)Random.insideUnitCircle * shakeAmount;
-                shakeTimer += Time.deltaTime; 
+                shakeTimer += Time.deltaTime;
                 yield return null;
             }
             mainCam.transform.localPosition = originalPos;
