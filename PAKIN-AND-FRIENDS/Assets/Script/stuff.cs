@@ -17,6 +17,11 @@ public class stuff : MonoBehaviour
     public GameObject ghostPrefab;          
     public float ghostSpawnDistance = 4f;  
 
+    [Header("Jump Scare Settings")]
+        public bool useJumpScare = false;   // ติ๊กเพื่อให้ทำ Jump Scare
+        public JumpScare jumpScare;         // ลากสคริปต์ JumpScare มาวาง
+
+
     void Start()
     {
         if (GJ != null) GJ.gameObject.SetActive(false);
@@ -33,10 +38,17 @@ public class stuff : MonoBehaviour
             // Player.Instance.interactionRange = 6.0f; 
             // -----------------------------------------------------------
 
-            // ถ้าตู้นี้ jump-scare ทันที
-            if (isJumpScareCabinet && !ghostSpawned)
+            // ถ้าเป็นตู้ Jump Scare
+            if (useJumpScare && !ghostSpawned)
             {
-                ghostSpawned = true; 
+                ghostSpawned = true;
+
+                // เรียกจั้มฟ์สแก
+                if (jumpScare != null)
+                {
+                    jumpScare.Play();   // <-- เรียกตรงนี้
+                }
+
                 return;
             }
 
@@ -76,6 +88,7 @@ public class stuff : MonoBehaviour
         }
         */
         // ---------------------------------------------------
+        
     }
     
     private void SpawnGhost()

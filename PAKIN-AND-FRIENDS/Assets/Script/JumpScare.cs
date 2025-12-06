@@ -1,62 +1,45 @@
 using System.Collections;
-using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 public class JumpScare : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public static JumpScare Instance; // ตัวแปรนี้จะเข้าถึงได้จากทุก Script
+    public GameObject jumpScareUI;
+    public AudioSource jumpScareSound;
+    public Camera mainCam;
+    public float shakeAmount = 0.2f;
+    public float shakeDuration = 0.3f;
+    public float displayTime = 1f;
 
-    public GameObject jumpScareUI;      // UI รูปผี
-    public AudioSource jumpScareSound;  // เสียง jumpscare
-    public Camera mainCam;              // กล้อง 2D
-    public float shakeAmount = 0.2f;    // ความแรงการสั่น
-    public float shakeDuration = 0.3f;  // ระยะเวลาสั่น
-    public float jumpScareDisplayTime = 1.0f; // ระยะเวลาโชว์รูปผี
-public void PlayJumpScare()
+    bool hasPlayed = false;
+
+    public void Play()
     {
-        StartCoroutine(JumpScareRoutine());
+        if (hasPlayed) return;   // ✅ ป้องกันเล่นซ้ำ
+        hasPlayed = true;
+
+        StartCoroutine(PlayRoutine());
     }
 
-void Awake() 
+    IEnumerator PlayRoutine()
     {
-        Instance = this;
-        
+        if (jumpScareUI != null) jumpScareUI.gameObject.SetActive(true);
+        if (jumpScareSound != null) jumpScareSound.Play();
+
+        Vector3 origin = mainCam.transform.localPosition;
+        float t = 0f;
+
+        while (t < shakeDuration)
+        {
+            mainCam.transform.localPosition = origin + (Vector3)Random.insideUnitCircle * shakeAmount;
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        mainCam.transform.localPosition = origin;
+
+        yield return new WaitForSeconds(displayTime);
+
+        if (jumpScareUI != null) jumpScareUI.gameObject.SetActive(false);
     }
-IEnumerator JumpScareRoutine()
-{
-    
-    // เปิดภาพผี
-    if (jumpScareUI != null)
-        jumpScareUI.SetActive(true);
-
-    // เล่นเสียง
-    if (jumpScareSound != null)
-        jumpScareSound.Play();
-
-    // สั่นกล้อง
-    Vector3 originalPos = mainCam.transform.localPosition;
-    float time = 0f;
-
-    while (time < shakeDuration)
-    {
-        mainCam.transform.localPosition =
-            originalPos + (Vector3)Random.insideUnitCircle * shakeAmount;
-
-        time += Time.deltaTime; // <<< ไม่หยุดเกม
-        yield return null;
-    }
-
-    // คืนตำแหน่งกล้อง
-    mainCam.transform.localPosition = originalPos;
-
-     // 4) รอจนรูปผีจะต้องปิดเอง
-    yield return new WaitForSeconds(jumpScareDisplayTime);
-    
-
-    // 5) ปิดรูปผี
-    if (jumpScareUI != null)
-        jumpScareUI.SetActive(false);
-        Debug.Log("JUMPSCARE: END");
-}
 }

@@ -355,7 +355,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -379,12 +379,11 @@ MonoBehaviour:
   disappearRange: 30
   jumpScareDistance: 0.8
   fadeInDuration: 1
+  fadeOutDuration: 2
+  searchDuration: 5
+  wanderRadius: 3
   jumpScareUI: {fileID: 1181201851490782408}
   jumpScareSound: {fileID: 2421395289858047071}
-  mainCam: {fileID: 0}
-  shakeAmount: 0.2
-  shakeDuration: 0.3
-  jumpScareDisplayTime: 1
 --- !u!95 &8891072119089486115
 Animator:
   serializedVersion: 5
