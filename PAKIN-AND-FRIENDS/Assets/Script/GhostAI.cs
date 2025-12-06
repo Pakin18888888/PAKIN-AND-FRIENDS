@@ -12,11 +12,11 @@ public class GhostAI : MonoBehaviour
 
     [Header("Fade Settings")]
     public float fadeInDuration = 1f;
-    public float fadeOutDuration = 1f;
+    public float fadeOutDuration = 2f;
 
-    [Header("Hide Logic")]
-    public float hideDelayBeforeFade = 1.5f;   // ดีเลย์ก่อนเริ่มเฟด
-    public float hideTimeToDisappear = 3f;     // เวลาที่ต้องอยู่ในตู้ถึงจะหาย
+    [Header("Hide Logic (Searching)")]
+    public float searchDuration = 5.0f;     // ผีจะเดินหานานแค่ไหนก่อนยอมแพ้
+    public float wanderRadius = 3.0f;       // รัศมีที่จะเดินวนเวียนรอบตู้
 
     [Header("Jumpscare")]
     public GameObject jumpScareUI;
@@ -31,8 +31,8 @@ public class GhostAI : MonoBehaviour
     bool isFadingOut = false;
     bool isJumpScaring = false;
 
-    float hideTimer = 0f;
-    float hideDelayTimer = 0f;
+    float searchTimer = 0f;
+    Vector2 wanderTarget; // เป้าหมายที่จะเดินไปตอนหาตัว
 
     void Start()
     {
@@ -49,6 +49,8 @@ public class GhostAI : MonoBehaviour
         }
 
         SetAlpha(0f);
+        // กำหนดจุดเริ่มต้นให้เป็นที่เดียวกับตัวเองก่อน
+        wanderTarget = transform.position; 
     }
 
     void FixedUpdate()
@@ -56,48 +58,62 @@ public class GhostAI : MonoBehaviour
         if (playerTransform == null || isJumpScaring)
             return;
 
-        // ================= PLAYER HIDING =================
+        Vector2 ghostPos = rb.position;
+        Vector2 playerPos = playerTransform.position;
+
+        // ================= PLAYER HIDING (โหมดเดินหา) =================
         if (Player.Instance != null && Player.Instance.isHiding)
         {
-            rb.velocity = Vector2.zero;
-            UpdateAnimation(Vector2.zero);
-
-            // ✅ กันไม่ให้ผี fade-in / โผล่ตอนผู้เล่นอยู่ในตู้
-            hideDelayTimer += Time.fixedDeltaTime;
-
-            if (hideDelayTimer >= hideDelayBeforeFade)
+            // ถ้ากำลังจางหายอยู่ ให้หยุดเดินแล้วรอหายไป
+            if (isFadingOut) 
             {
-                hideTimer += Time.fixedDeltaTime;
-
-                if (hideTimer >= hideTimeToDisappear && !isFadingOut)
-                {
-                    StartCoroutine(FadeOutAndDisappear());
-                }
+                rb.velocity = Vector2.zero;
+                return;
             }
 
-            return;
+            // เริ่มนับเวลาการหา
+            searchTimer += Time.fixedDeltaTime;
+
+            // 1. ถ้ายังหาไม่ครบเวลา -> ให้เดินวนเวียน (Wander)
+            if (searchTimer < searchDuration)
+            {
+                WanderAroundPosition(playerPos);
+            }
+            // 2. ถ้าหมดเวลาแล้ว -> เริ่มจางหาย (Give Up)
+            else
+            {
+                rb.velocity = Vector2.zero; // หยุดเดินตอนจะหายตัว
+                UpdateAnimation(Vector2.zero);
+                StartCoroutine(FadeOutAndDisappear());
+            }
+
+            return; // จบงานของเฟรมนี้ ไม่ต้องไปทำ Chase Logic
         }
         else
         {
-            hideTimer = 0f;
-            hideDelayTimer = 0f;
+            // ถ้าผู้เล่นออกมาแล้ว ให้รีเซ็ตเวลาหา
+            searchTimer = 0f;
+            
+            // ถ้ากำลังจางหายอยู่แต่ออกมาเจอพอดี ให้กลับมาไล่ล่าต่อ
+            if (isFadingOut) 
+            {
+                StopAllCoroutines();
+                isFadingOut = false;
+                isVisible = true; 
+                SetAlpha(1f);
+            }
         }
 
-        Vector2 ghostPos = rb.position;
-        Vector2 playerPos = playerTransform.position;
+        // ================= NORMAL CHASE LOGIC (โหมดไล่ล่าปกติ) =================
         float dist = Vector2.Distance(ghostPos, playerPos);
 
-        // ================= DETECT PLAYER =================
         if (dist <= detectRange)
         {
             if (!isVisible && !isFadingIn)
                 StartCoroutine(FadeInGhost());
 
-            Vector2 direction = playerPos - ghostPos;
-            Vector2 newPos = Vector2.MoveTowards(ghostPos, playerPos, speed * Time.fixedDeltaTime);
-            rb.MovePosition(newPos);
-
-            UpdateAnimation(direction);
+            // เดินเข้าหาผู้เล่นตรงๆ
+            MoveToTarget(playerPos);
         }
         else
         {
@@ -118,37 +134,60 @@ public class GhostAI : MonoBehaviour
         }
     }
 
-    // ================= FADE IN =================
+    // 🔥 ฟังก์ชันใหม่: เดินวนเวียนสุ่มจุดรอบๆ เป้าหมาย
+    void WanderAroundPosition(Vector2 centerPos)
+    {
+        // ถ้าเดินถึงจุดหมายเก่าแล้ว (หรือใกล้มาก) ให้สุ่มจุดใหม่
+        if (Vector2.Distance(rb.position, wanderTarget) < 0.2f)
+        {
+            // สุ่มจุดใหม่ในวงกลมรอบๆ ตู้ (Random Point)
+            Vector2 randomPoint = Random.insideUnitCircle * wanderRadius;
+            wanderTarget = centerPos + randomPoint;
+        }
+
+        // เดินไปหาจุดนั้น
+        MoveToTarget(wanderTarget);
+    }
+
+    // ฟังก์ชันเดินและอัปเดตอนิเมชั่น
+    void MoveToTarget(Vector2 target)
+    {
+        Vector2 currentPos = rb.position;
+        Vector2 direction = target - currentPos;
+        
+        // ขยับตัว
+        Vector2 newPos = Vector2.MoveTowards(currentPos, target, speed * Time.fixedDeltaTime);
+        rb.MovePosition(newPos);
+
+        // อัปเดตอนิเมชั่น
+        UpdateAnimation(direction);
+    }
+
+    // ... (ส่วน FadeIn, FadeOut, JumpAttack, SetAlpha เหมือนเดิม ไม่ต้องแก้) ...
+    
     IEnumerator FadeInGhost()
     {
         isFadingIn = true;
-
         float t = 0f;
         while (t < fadeInDuration)
         {
-            // ❌ ถ้าผู้เล่นเข้าตู้ระหว่างเฟด → หยุดทันที
             if (Player.Instance != null && Player.Instance.isHiding)
             {
                 isFadingIn = false;
                 yield break;
             }
-
             t += Time.deltaTime;
             SetAlpha(Mathf.Lerp(0f, 1f, t / fadeInDuration));
             yield return null;
         }
-
         SetAlpha(1f);
         isVisible = true;
         isFadingIn = false;
     }
 
-    // ================= FADE OUT =================
     IEnumerator FadeOutAndDisappear()
     {
         isFadingOut = true;
-        StopAllCoroutines();
-
         float t = 0f;
         float startAlpha = spriteRenderer.color.a;
 
@@ -158,30 +197,24 @@ public class GhostAI : MonoBehaviour
             SetAlpha(Mathf.Lerp(startAlpha, 0f, t / fadeOutDuration));
             yield return null;
         }
-
-        DisappearForever();
+        SetAlpha(0f);
+        gameObject.SetActive(false);
     }
 
-    // ================= JUMPSCARE =================
     IEnumerator JumpAttack()
     {
         isJumpScaring = true;
-
         if (jumpScareUI != null) jumpScareUI.SetActive(true);
         if (jumpScareSound != null) jumpScareSound.Play();
-
         yield return new WaitForSeconds(0.5f);
-        DisappearForever();
+        gameObject.SetActive(false);
     }
 
-    // ================= UTILS =================
     void UpdateAnimation(Vector2 dir)
     {
         if (animator == null) return;
-
         bool move = dir.magnitude > 0.01f;
         animator.SetBool("IsWalking", move);
-
         if (move)
         {
             animator.SetFloat("InputX", dir.x);
@@ -195,11 +228,5 @@ public class GhostAI : MonoBehaviour
         Color c = spriteRenderer.color;
         c.a = a;
         spriteRenderer.color = c;
-    }
-
-    void DisappearForever()
-    {
-        StopAllCoroutines();
-        gameObject.SetActive(false);
     }
 }
