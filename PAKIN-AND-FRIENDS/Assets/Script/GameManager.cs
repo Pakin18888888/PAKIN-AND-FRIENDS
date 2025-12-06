@@ -59,4 +59,19 @@ public class GameManager : MonoBehaviour
             nextSpawnID = null; // รีเซ็ต
         }
     }
+
+    [System.Serializable]
+public class PlayerData
+{
+    public int hp = 100;
+    // เก็บค่าอื่นๆ ของผู้เล่นที่นี่
+}
+
+[System.Serializable]
+public class SceneStateData
+{
+    // ลิสต์เก็บชื่อประตูที่เปิดไปแล้ว
+    public List<string> openedDoors = new List<string>(); 
+    public List<string> playedJumpScare = new List<string>();
+}
 }

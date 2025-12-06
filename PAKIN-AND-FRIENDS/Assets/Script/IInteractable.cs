@@ -4,8 +4,8 @@ using UnityEngine;
 
 public interface IInteractable 
 {
-    public void Interact()
-    {
-        
-    }
+    void OnInteract(); 
+    
+    // (Option) ชื่อที่จะขึ้นโชว์ตอนเอาเมาส์ไปชี้ เช่น "เก็บกุญแจ", "เปิดไฟ"
+    string GetDescription();
 }

@@ -202,6 +202,10 @@ PrefabInstance:
       propertyPath: spawnPointID
       value: FromLivingRoom1
       objectReference: {fileID: 0}
+    - target: {fileID: 9179945870747781532, guid: cea655027f2ddb54496d2fe9aac132a7, type: 3}
+      propertyPath: requiredDoorIDToCheck
+      value: FromLivingRoom1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

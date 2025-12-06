@@ -15,9 +15,7 @@ public class stuff : MonoBehaviour
     public bool isJumpScareCabinet = false; 
     public bool ghostSpawned = false;       
     public GameObject ghostPrefab;          
-    public float ghostSpawnDistance = 4f;   
-
-    // 🔥 ลบตัวแปร Jumpscare UI/Sound/Camera Shake ออกจากสคริปต์นี้
+    public float ghostSpawnDistance = 4f;  
 
     void Start()
     {
@@ -31,18 +29,15 @@ public class stuff : MonoBehaviour
     {
         if(pickUpAllowed && Input.GetKeyDown(KeyCode.E))
         {
-            // ถ้าตู้นี้ jump-scare ทันที (ลบ PlayJumpScare() ออกไปแล้ว)
+            // --- ส่วนที่ตัดออก: ไม่ควรไปยุ่งกับ interactionRange ของผู้เล่นตรงนี้ ---
+            // Player.Instance.interactionRange = 6.0f; 
+            // -----------------------------------------------------------
+
+            // ถ้าตู้นี้ jump-scare ทันที
             if (isJumpScareCabinet && !ghostSpawned)
             {
-                 // ถ้าใช้ isJumpScareCabinet ต้องเรียก Jumpscare จากระบบอื่น
-                 // (แนะนำให้ใช้ SpawnGhost() แล้วให้ GhostAI2D Jumpscare แทน)
-                 // หรือถ้าอยากให้ Jumpscare ทันที อาจต้อง Instantiate Ghost 
-                 // และสั่งให้มันทำ Jumpscare โดยตรง
-                 
-                 // สำหรับตอนนี้ เราจะเน้นที่ hasGhost
-                 
-                 ghostSpawned = true; // ป้องกันการเรียกซ้ำ
-                 return;
+                ghostSpawned = true; 
+                return;
             }
 
             // ถ้าตู้นี้ spawn ผี
@@ -52,28 +47,42 @@ public class stuff : MonoBehaviour
                 ghostSpawned = true;
             }
 
+            // สลับสถานะ UI (เปิด/ปิด)
             bool isActive = !GJ1.activeSelf;
             bool isActive1 = !GJ.gameObject.activeSelf;
+            
             if (GJ != null) GJ.gameObject.SetActive(isActive1);
             if (GJ1 != null) GJ1.SetActive(isActive);
 
+            // หมายเหตุ: การใช้ Time.timeScale = 0 จะทำให้เกมหยุด "ทุกอย่าง" รวมทั้งผีด้วย
+            // ถ้าตั้งใจให้เป็นตู้ซ่อนตัว (Hide) ไม่ควรหยุดเวลาครับ
+            // แต่ถ้าตั้งใจให้เป็นหน้าอ่านกระดาษ (Read Note) การหยุดเวลาถือว่าถูกต้องครับ
             if (isActive)
             {
+                if (Player.Instance != null) Player.Instance.interactionRange = 6.0f;
                 Time.timeScale = 0f;
             }
             else
             {
+                if (Player.Instance != null) Player.Instance.interactionRange = 1.0f;
                 Time.timeScale = 1f;
             }
         }
+        
+        // --- ส่วนที่ตัดออก: ลบ else ที่ไปลดระยะแขนผู้เล่นทิ้ง ---
+        /* else
+        {
+            Player.Instance.interactionRange = 1.0f; 
+        }
+        */
+        // ---------------------------------------------------
     }
     
     private void SpawnGhost()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player == null || ghostPrefab == null) return;
+        // ✅ แก้ไข: ใช้ Player.Instance เช็คได้เลย ไม่ต้อง Find ให้หนักเครื่อง
+        if (Player.Instance == null || ghostPrefab == null) return;
 
-        // 🔥 Logic การสุ่มตำแหน่งรอบตู้
         Vector3 centerPoint = transform.position;
         
         // สุ่มมุม 0-360 องศา
@@ -86,24 +95,23 @@ public class stuff : MonoBehaviour
         Vector3 spawnPos = centerPoint + randomDir.normalized * ghostSpawnDistance;
         spawnPos.z = 0f;
 
-        // 5. Instantiating
+        // สร้างผี
         GameObject newGhost = Instantiate(ghostPrefab, spawnPos, Quaternion.identity);
         
-        // 6. กำหนด Player Transform ให้ GhostAI2D
+        // ✅ แก้ไข: ส่ง transform ของ Player.Instance ไปให้ผี
         GhostAI2D ghostAI = newGhost.GetComponent<GhostAI2D>();
         if (ghostAI != null)
         {
-            ghostAI.playerTransform = player.transform;
+            ghostAI.playerTransform = Player.Instance.transform;
         }
 
         Debug.Log("Spawned ghost from cabinet: " + gameObject.name + " at " + spawnPos);
     }
-    
-    // 🔥 ลบฟังก์ชัน PlayJumpScare() และ JumpScareRoutine() ออกจากสคริปต์นี้
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Player")
+        // ใช้ CompareTag ประหยัดกว่า ==
+        if(collision.CompareTag("Player"))
         {
             if (GJ != null) GJ.gameObject.SetActive(true);
             pickUpAllowed = true;
@@ -112,7 +120,7 @@ public class stuff : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Player")
+        if(collision.CompareTag("Player"))
         {
             if(GJ != null)
             {
