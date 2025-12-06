@@ -1,32 +1,38 @@
 using System.Collections;
 using UnityEngine;
 
-public class GhostAI2D : MonoBehaviour // ✅ สืบทอดจาก MonoBehaviour ถูกต้องแล้ว
+public class GhostAI : MonoBehaviour
 {
-    // ตัวแปรการไล่ล่าและการตรวจจับ
+    [Header("Detect & Move")]
     public Transform playerTransform;
     public float detectRange = 20f;
     public float speed = 3f;
     public float disappearRange = 30f;
     public float jumpScareDistance = 0.8f;
-    public float fadeInDuration = 1.0f; 
 
-    // 🔥 ตัวแปร Jumpscare (ย้ายมาจาก stuff.cs)
-    [Header("Jumpscare Settings")]
-    public GameObject jumpScareUI;     
-    public AudioSource jumpScareSound;  
-    public Camera mainCam;              
-    public float shakeAmount = 0.2f;
-    public float shakeDuration = 0.3f;
-    public float jumpScareDisplayTime = 1f; 
-    
-    // ตัวแปรส่วนตัว
+    [Header("Fade Settings")]
+    public float fadeInDuration = 1f;
+    public float fadeOutDuration = 1f;
+
+    [Header("Hide Logic")]
+    public float hideDelayBeforeFade = 1.5f;   // ดีเลย์ก่อนเริ่มเฟด
+    public float hideTimeToDisappear = 3f;     // เวลาที่ต้องอยู่ในตู้ถึงจะหาย
+
+    [Header("Jumpscare")]
+    public GameObject jumpScareUI;
+    public AudioSource jumpScareSound;
+
     Rigidbody2D rb;
+    Animator animator;
+    SpriteRenderer spriteRenderer;
+
+    bool isVisible = false;
+    bool isFadingIn = false;
+    bool isFadingOut = false;
     bool isJumpScaring = false;
-    private Animator animator;
-    private SpriteRenderer spriteRenderer;
-    private bool isFadingIn = false;
-    private bool isVisible = false;
+
+    float hideTimer = 0f;
+    float hideDelayTimer = 0f;
 
     void Start()
     {
@@ -37,191 +43,163 @@ public class GhostAI2D : MonoBehaviour // ✅ สืบทอดจาก MonoBe
         if (playerTransform == null)
         {
             if (Player.Instance != null)
-            {
                 playerTransform = Player.Instance.transform;
-            }
             else
-            {
                 playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
-            }
-            
-            if (playerTransform == null)
-                Debug.LogError("GhostAI2D: NO PLAYER FOUND! Set Player tag correctly.");
         }
-        
-        // เริ่มต้นให้ผีล่องหน (Alpha = 0)
-        if(spriteRenderer != null)
-        {
-            Color c = spriteRenderer.color;
-            c.a = 0f;
-            spriteRenderer.color = c;
-        }
+
+        SetAlpha(0f);
     }
-    
+
     void FixedUpdate()
     {
-        if (playerTransform == null || isJumpScaring || isFadingIn) return; 
+        if (playerTransform == null || isJumpScaring)
+            return;
 
-        // 🔥 Logic: Player ซ่อนอยู่
+        // ================= PLAYER HIDING =================
         if (Player.Instance != null && Player.Instance.isHiding)
         {
             rb.velocity = Vector2.zero;
             UpdateAnimation(Vector2.zero);
 
-            // ล่องหนทันทีเมื่อ Player ซ่อน
-            if (isVisible)
+            // ✅ กันไม่ให้ผี fade-in / โผล่ตอนผู้เล่นอยู่ในตู้
+            hideDelayTimer += Time.fixedDeltaTime;
+
+            if (hideDelayTimer >= hideDelayBeforeFade)
             {
-                Color c = spriteRenderer.color;
-                c.a = 0f;
-                spriteRenderer.color = c;
-                isVisible = false;
+                hideTimer += Time.fixedDeltaTime;
+
+                if (hideTimer >= hideTimeToDisappear && !isFadingOut)
+                {
+                    StartCoroutine(FadeOutAndDisappear());
+                }
             }
+
             return;
+        }
+        else
+        {
+            hideTimer = 0f;
+            hideDelayTimer = 0f;
         }
 
         Vector2 ghostPos = rb.position;
         Vector2 playerPos = playerTransform.position;
-
         float dist = Vector2.Distance(ghostPos, playerPos);
 
+        // ================= DETECT PLAYER =================
         if (dist <= detectRange)
         {
-            // เริ่ม Fade In ถ้ายังไม่โผล่
             if (!isVisible && !isFadingIn)
-            {
                 StartCoroutine(FadeInGhost());
-                return;
-            }
-            
-            // ไล่ตามปกติ
+
             Vector2 direction = playerPos - ghostPos;
             Vector2 newPos = Vector2.MoveTowards(ghostPos, playerPos, speed * Time.fixedDeltaTime);
             rb.MovePosition(newPos);
-            
-            UpdateAnimation(direction); 
+
+            UpdateAnimation(direction);
         }
         else
         {
-            // ล่องหนเมื่อหลุดระยะตรวจจับ
             if (isVisible)
             {
-                Color c = spriteRenderer.color;
-                c.a = 0f;
-                spriteRenderer.color = c;
+                SetAlpha(0f);
                 isVisible = false;
             }
 
-            // ทำลายตัวเองเมื่อหลุดระยะหายตัว
             if (dist >= disappearRange)
-            {
                 Destroy(gameObject);
-            }
         }
 
-        // 🔥 Trigger Jumpscare
-        if (isVisible && dist <= jumpScareDistance)
+        // ================= JUMPSCARE =================
+        if (isVisible && dist <= jumpScareDistance && !isJumpScaring)
         {
             StartCoroutine(JumpAttack());
         }
     }
 
+    // ================= FADE IN =================
     IEnumerator FadeInGhost()
     {
         isFadingIn = true;
-        float timer = 0f;
-        
-        while (timer < fadeInDuration)
+
+        float t = 0f;
+        while (t < fadeInDuration)
         {
-            timer += Time.fixedDeltaTime;
-            float alpha = Mathf.Lerp(0f, 1f, timer / fadeInDuration);
-            Color c = spriteRenderer.color;
-            c.a = alpha;
-            spriteRenderer.color = c;
-            
-            yield return new WaitForFixedUpdate();
-        }
-
-        Color finalColor = spriteRenderer.color;
-        finalColor.a = 1f;
-        spriteRenderer.color = finalColor;
-
-        isFadingIn = false;
-        isVisible = true;
-    }
-
-    void UpdateAnimation(Vector2 direction)
-    {
-        if (animator == null) return;
-
-        bool isMoving = direction.magnitude > 0.01f;
-        animator.SetBool("IsWalking", isMoving);
-
-        if (isMoving)
-        {
-            animator.SetFloat("InputX", direction.x);
-            animator.SetFloat("InputY", direction.y);
-
-            if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+            // ❌ ถ้าผู้เล่นเข้าตู้ระหว่างเฟด → หยุดทันที
+            if (Player.Instance != null && Player.Instance.isHiding)
             {
-                animator.SetFloat("LastInputX", Mathf.Sign(direction.x));
-                animator.SetFloat("LastInputY", 0f);
+                isFadingIn = false;
+                yield break;
             }
-            else
-            {
-                animator.SetFloat("LastInputX", 0f);
-                animator.SetFloat("LastInputY", Mathf.Sign(direction.y));
-            }
-        }
-    }
-    
-    IEnumerator JumpAttack()
-    {
-        isJumpScaring = true;
-        if (animator != null) animator.SetBool("IsWalking", false);
 
-        // 1) พุ่งเข้าหาผู้เล่น
-        float jumpHeight = 1.5f;
-        float jumpTime = 0.2f;
-
-        Vector3 startPos = transform.position;
-        Vector3 endPos = playerTransform.position;
-
-        float t = 0;
-        while (t < 1)
-        {
-            t += Time.deltaTime / jumpTime;
-            float height = Mathf.Sin(t * Mathf.PI) * jumpHeight;
-            transform.position = Vector3.Lerp(startPos, endPos, t) + new Vector3(0, height, 0);
+            t += Time.deltaTime;
+            SetAlpha(Mathf.Lerp(0f, 1f, t / fadeInDuration));
             yield return null;
         }
 
-        // 2) เล่น Jumpscare
-        if (jumpScareUI != null) jumpScareUI.SetActive(true);
-        if (jumpScareSound != null)
-            Destroy(gameObject, jumpScareSound.clip.length);
-        else
-            Destroy(gameObject);
+        SetAlpha(1f);
+        isVisible = true;
+        isFadingIn = false;
+    }
 
+    // ================= FADE OUT =================
+    IEnumerator FadeOutAndDisappear()
+    {
+        isFadingOut = true;
+        StopAllCoroutines();
 
-        // 3) Camera Shake
-        if (mainCam != null)
+        float t = 0f;
+        float startAlpha = spriteRenderer.color.a;
+
+        while (t < fadeOutDuration)
         {
-            Vector3 originalPos = mainCam.transform.localPosition;
-            float shakeTimer = 0f;
-            while (shakeTimer < shakeDuration)
-            {
-                mainCam.transform.localPosition = originalPos + (Vector3)Random.insideUnitCircle * shakeAmount;
-                shakeTimer += Time.deltaTime;
-                yield return null;
-            }
-            mainCam.transform.localPosition = originalPos;
+            t += Time.deltaTime;
+            SetAlpha(Mathf.Lerp(startAlpha, 0f, t / fadeOutDuration));
+            yield return null;
         }
 
-        // 4) รอและปิด UI
-        yield return new WaitForSeconds(jumpScareDisplayTime);
-        if (jumpScareUI != null) jumpScareUI.SetActive(false);
+        DisappearForever();
+    }
 
-        // 5) ผีหายตัว
-        Destroy(gameObject);
+    // ================= JUMPSCARE =================
+    IEnumerator JumpAttack()
+    {
+        isJumpScaring = true;
+
+        if (jumpScareUI != null) jumpScareUI.SetActive(true);
+        if (jumpScareSound != null) jumpScareSound.Play();
+
+        yield return new WaitForSeconds(0.5f);
+        DisappearForever();
+    }
+
+    // ================= UTILS =================
+    void UpdateAnimation(Vector2 dir)
+    {
+        if (animator == null) return;
+
+        bool move = dir.magnitude > 0.01f;
+        animator.SetBool("IsWalking", move);
+
+        if (move)
+        {
+            animator.SetFloat("InputX", dir.x);
+            animator.SetFloat("InputY", dir.y);
+        }
+    }
+
+    void SetAlpha(float a)
+    {
+        if (spriteRenderer == null) return;
+        Color c = spriteRenderer.color;
+        c.a = a;
+        spriteRenderer.color = c;
+    }
+
+    void DisappearForever()
+    {
+        StopAllCoroutines();
+        gameObject.SetActive(false);
     }
 }

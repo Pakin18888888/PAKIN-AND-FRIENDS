@@ -391,7 +391,6 @@ MonoBehaviour:
   ghostSpawned: 0
   ghostPrefab: {fileID: 6088588945290487277, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
   ghostSpawnDistance: 2
-  player: {fileID: 2311219801810688791, guid: 3f31c3ed082e30946ad307736f130e58, type: 3}
 --- !u!61 &492529623
 BoxCollider2D:
   m_ObjectHideFlags: 0

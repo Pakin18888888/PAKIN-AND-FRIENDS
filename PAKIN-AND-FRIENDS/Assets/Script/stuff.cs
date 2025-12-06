@@ -99,7 +99,7 @@ public class stuff : MonoBehaviour
         GameObject newGhost = Instantiate(ghostPrefab, spawnPos, Quaternion.identity);
         
         // ✅ แก้ไข: ส่ง transform ของ Player.Instance ไปให้ผี
-        GhostAI2D ghostAI = newGhost.GetComponent<GhostAI2D>();
+        GhostAI ghostAI = newGhost.GetComponent<GhostAI>();
         if (ghostAI != null)
         {
             ghostAI.playerTransform = Player.Instance.transform;
