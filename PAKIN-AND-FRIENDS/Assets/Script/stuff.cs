@@ -71,7 +71,7 @@ public class stuff : MonoBehaviour
             // แต่ถ้าตั้งใจให้เป็นหน้าอ่านกระดาษ (Read Note) การหยุดเวลาถือว่าถูกต้องครับ
             if (isActive)
             {
-                if (Player.Instance != null) Player.Instance.interactionRange = 6.0f;
+                if (Player.Instance != null) Player.Instance.interactionRange = 10.0f;
                 Time.timeScale = 0f;
             }
             else

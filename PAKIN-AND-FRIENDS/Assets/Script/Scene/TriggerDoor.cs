@@ -1,5 +1,7 @@
 using UnityEngine;
-using System.Linq; // จำเป็นสำหรับ .Contains
+using System.Linq;
+using TMPro;
+using Unity.VisualScripting; // จำเป็นสำหรับ .Contains
 
 public class TriggerDoor : MonoBehaviour
 {
@@ -10,6 +12,7 @@ public class TriggerDoor : MonoBehaviour
 
     private Collider2D doorCollider; 
     private SpriteRenderer spriteRenderer;
+    public TextMeshProUGUI textMeshProUGUI;
 
     void Awake()
     {
@@ -19,6 +22,7 @@ public class TriggerDoor : MonoBehaviour
 
     void Start()
     {
+        textMeshProUGUI.gameObject.SetActive(false);
         // --- 1. ตรวจสอบกับ GameManager ว่าประตูนี้เคยเปิดไปหรือยัง ---
         if (GameManager.Instance != null)
         {
@@ -80,5 +84,40 @@ public class TriggerDoor : MonoBehaviour
         // ใส่ Effect เปิดประตู หรือ Animation ตรงนี้
         if(doorCollider) doorCollider.enabled = false;
         if(spriteRenderer) spriteRenderer.enabled = false; 
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // ถ้าเปิดประตูไปแล้ว ไม่ต้องโชว์ข้อความ
+        if (!isLocked) return;
+
+        if (collision.CompareTag("Player"))
+        {
+            if (textMeshProUGUI != null)
+            {
+                textMeshProUGUI.gameObject.SetActive(true);
+                
+                if (CheckIfPlayerHasKey())
+                {
+                    textMeshProUGUI.text = "[E] Unlock"; // บอกปุ่มด้วยจะดีมาก
+                }
+                else
+                {
+                    textMeshProUGUI.text = "Locked";
+                }
+            }
+        }
+    }
+
+    // ✅ แก้ไข 2: เพิ่มฟังก์ชันปิดข้อความเมื่อเดินออก
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            if (textMeshProUGUI != null)
+            {
+                textMeshProUGUI.gameObject.SetActive(false);
+            }
+        }
     }
 }
