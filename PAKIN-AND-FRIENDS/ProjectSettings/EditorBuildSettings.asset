@@ -6,8 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/HomeMenu.unity
+    guid: 6088b82adc51ea34eb4362f21c4156ce
+  - enabled: 1
     path: Assets/Scenes/F2/meroom.unity
     guid: 86002801cd7f3d841be4eea99dc7d631
+  - enabled: 1
+    path: Assets/Scenes/CutScene.unity
+    guid: 9210ab60e19bf3a4d8ec928d7d924ae9
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02

@@ -10,9 +10,9 @@ public class GameManager : MonoBehaviour
     public SceneStateData sceneState;
 
     // --- ส่วนที่เพิ่มเข้ามาใหม่สำหรับระบบวาร์ป ---
-    public string nextSpawnID; 
+    public string nextSpawnID;
     // -------------------------------------
-
+    
     void Awake()
     {
         if (Instance == null)
@@ -74,4 +74,8 @@ public class SceneStateData
     public List<string> openedDoors = new List<string>(); 
     public List<string> playedJumpScare = new List<string>();
 }
+    
+
+   
+    
 }
