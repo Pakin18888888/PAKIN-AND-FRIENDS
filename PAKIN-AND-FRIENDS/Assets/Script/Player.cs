@@ -145,6 +145,7 @@ public class Player : MonoBehaviour
         if (currentLocker != null && isHiding)
         {
             currentLocker.OnPlayerInteracting();
+            newLightRadius = 6f;
             return; 
         }
 
