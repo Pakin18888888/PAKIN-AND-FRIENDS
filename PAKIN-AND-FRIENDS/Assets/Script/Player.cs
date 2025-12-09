@@ -1,5 +1,6 @@
 using UnityEngine;
-using UnityEngine.InputSystem; 
+using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 public class Player : MonoBehaviour
 {
@@ -29,6 +30,10 @@ public class Player : MonoBehaviour
     // 🔥 ตัวแปรระบบซ่อนตัว
     [HideInInspector] public bool isHiding = false; 
     [HideInInspector] public TriggerLocker currentLocker;
+
+    [Header("Flashlight Settings")]
+    public Light2D playerLight; // ลาก Component Light 2D ของผู้เล่นมาใส่ช่องนี้
+    public float newLightRadius = 8.0f; // ขนาดรัศมีแสงที่จะใหญ่ขึ้น
 
     void Awake()
     {
@@ -205,5 +210,15 @@ public class Player : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, interactionRange);
+    }
+
+    public void EnableFlashlight()
+    {
+        if (playerLight != null)
+        {
+            // ปรับขนาดแสง (Outer Radius คือวงนอกสุด)
+            playerLight.pointLightOuterRadius = newLightRadius;
+            Debug.Log("แสงสว่างขึ้นแล้ว!");
+        }
     }
 }
