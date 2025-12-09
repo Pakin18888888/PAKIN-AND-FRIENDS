@@ -1182,7 +1182,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2311219801810688791, guid: 3f31c3ed082e30946ad307736f130e58, type: 3}
       propertyPath: newLightRadius
-      value: 969.9
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2311219801810688791, guid: 3f31c3ed082e30946ad307736f130e58, type: 3}
       propertyPath: InteractLayer.m_Bits
