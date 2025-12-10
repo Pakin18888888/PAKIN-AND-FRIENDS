@@ -12,6 +12,16 @@ public class GameManager : MonoBehaviour
     // --- ส่วนที่เพิ่มเข้ามาใหม่สำหรับระบบวาร์ป ---
     public string nextSpawnID;
     // -------------------------------------
+
+    public GameObject gameOverUIPrefab;
+
+    void Start()
+    {
+        if (GameOverUI.Instance == null)
+        {
+            Instantiate(gameOverUIPrefab);
+        }
+    }
     
     void Awake()
     {

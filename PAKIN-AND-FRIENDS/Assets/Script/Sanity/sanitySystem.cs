@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class sanitySystem : MonoBehaviour
 {
     public static sanitySystem Instance;
+    bool isGameOver = false;
+
 
     [Header("Scene Control")]
     public string safeSceneName = "StartScene";  // ✅ ชื่อ Scene ที่ Sanity ไม่ลด
@@ -55,11 +57,43 @@ public class sanitySystem : MonoBehaviour
     }
 
     void Update()
+{
+    if (isGameOver) return;
+
+    DrainSanityOverTime();
+    UpdateUI();
+    ApplySanityEffectToPlayer();
+
+    if (currentSanity <= 0)
     {
-        DrainSanityOverTime();
-        UpdateUI();
-        ApplySanityEffectToPlayer();
+        TriggerGameOver();
     }
+}
+void TriggerGameOver()
+{
+    isGameOver = true;
+
+    currentSanity = 0;
+    UpdateUI();
+
+    Debug.Log("❌ GAME OVER TRIGGERED");
+
+    if (GameOverUI.Instance != null)
+    {
+        GameOverUI.Instance.ShowGameOver();
+    }
+    else
+    {
+        Debug.LogError("❌ GameOverUI Instance = NULL");
+    }
+
+    if (Player.Instance != null)
+    {
+        Player.Instance.canMove = false;
+    }
+}
+
+
 
     // ==============================
     // ลดค่าสติอัตโนมัติ
