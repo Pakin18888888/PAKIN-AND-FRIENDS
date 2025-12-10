@@ -2911,6 +2911,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e20bb6ec0998ed4daa12acb69e6e09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectID: Cabinet_JumpScare_03
   GJ: {fileID: 731881311}
   GJ1: {fileID: 153380129}
   pickUpAllowed: 0
@@ -3320,6 +3321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e20bb6ec0998ed4daa12acb69e6e09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectID: 
   GJ: {fileID: 556950675}
   GJ1: {fileID: 153380129}
   pickUpAllowed: 0
@@ -3593,6 +3595,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyID: mamaroom
+  icon: {fileID: 21300000, guid: 5b58696a2ed38d0439564da79a67a9d3, type: 3}
 --- !u!60 &1972512292
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -4029,6 +4032,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e20bb6ec0998ed4daa12acb69e6e09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectID: Cabinet_JumpScare_04
   GJ: {fileID: 556950675}
   GJ1: {fileID: 1239774687}
   pickUpAllowed: 0

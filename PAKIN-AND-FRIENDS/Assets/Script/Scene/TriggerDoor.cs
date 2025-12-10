@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting; // จำเป็นสำหรับ .Contains
 
 public class TriggerDoor : MonoBehaviour
 {
@@ -22,94 +21,96 @@ public class TriggerDoor : MonoBehaviour
 
     void Start()
     {
-        textMeshProUGUI.gameObject.SetActive(false);
-        // --- 1. ตรวจสอบกับ GameManager ว่าประตูนี้เคยเปิดไปหรือยัง ---
+        if (textMeshProUGUI != null) textMeshProUGUI.gameObject.SetActive(false);
+
+        // เช็คว่าเคยเปิดไปแล้วหรือยัง (Save System)
         if (GameManager.Instance != null)
         {
-            // ถ้าในความทรงจำมีชื่อประตูนี้อยู่ แสดงว่าเคยเปิดแล้ว
             if (GameManager.Instance.sceneState.openedDoors.Contains(doorID))
-            {
-                OpenInstant(); // สั่งให้เปิดทันทีโดยไม่ต้องไข
-            }
+                OpenInstant();
         }
     }
 
+    // ❌ ลบ Update() ทิ้งไปเลย เพราะ Player.cs จะเป็นคนเรียกฟังก์ชันนี้เองเมื่อกด E
+    
     public void UnlockAndOpen()
     {
-        if (!isLocked) return; 
+        if (!isLocked) return;
 
-        // เช็คกุญแจจาก Inventory
         if (CheckIfPlayerHasKey())
         {
             Debug.Log("ไขกุญแจสำเร็จ: " + doorID);
+            
+            // ✅ ลบกุญแจออกจากกระเป๋า
+            if (Inventory.Instance != null)
+            {
+                Inventory.Instance.RemoveItem(doorID, 1);
+            }
+
             isLocked = false;
             OpenDoor();
+
+            // ปิด UI ทันทีที่เปิดได้
+            if (textMeshProUGUI != null) textMeshProUGUI.gameObject.SetActive(false);
         }
         else
         {
             Debug.Log("ไม่มีกุญแจสำหรับประตู: " + doorID);
+            // ใส่เสียงประตู [Locked] ตรงนี้
         }
     }
 
     bool CheckIfPlayerHasKey()
     {
         if (Inventory.Instance == null) return false;
-        return Inventory.Instance.keyIDs.Contains(doorID);
+        return Inventory.Instance.items.Any(item => item.id == doorID);
     }
 
     public void OpenDoor()
     {
-        // --- 2. บันทึกชื่อประตูลง GameManager ---
-        if(GameManager.Instance != null)
+        // บันทึกว่าเปิดแล้ว
+        if (GameManager.Instance != null)
         {
-            // ถ้ายังไม่มีชื่อในลิสต์ ให้เพิ่มเข้าไป
             if (!GameManager.Instance.sceneState.openedDoors.Contains(doorID))
-            {
                 GameManager.Instance.sceneState.openedDoors.Add(doorID);
-            }
         }
 
         OpenAnimation();
     }
 
-    void OpenInstant() 
+    void OpenInstant()
     {
         isLocked = false;
-        if(doorCollider) doorCollider.enabled = false;
-        if(spriteRenderer) spriteRenderer.enabled = false; 
+        if (doorCollider) doorCollider.enabled = false;
+        if (spriteRenderer) spriteRenderer.enabled = false;
     }
 
-    void OpenAnimation() 
+    void OpenAnimation()
     {
-        // ใส่ Effect เปิดประตู หรือ Animation ตรงนี้
-        if(doorCollider) doorCollider.enabled = false;
-        if(spriteRenderer) spriteRenderer.enabled = false; 
+        // ใส่ Animation เปิดประตู / เล่นเสียงเปิด
+        if (doorCollider) doorCollider.enabled = false;
+        if (spriteRenderer) spriteRenderer.enabled = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // ถ้าเปิดประตูไปแล้ว ไม่ต้องโชว์ข้อความ
         if (!isLocked) return;
 
+        // แสดง UI เมื่อเดินชน (แต่ยังไม่กด E)
         if (collision.CompareTag("Player"))
         {
             if (textMeshProUGUI != null)
             {
                 textMeshProUGUI.gameObject.SetActive(true);
-                
+
                 if (CheckIfPlayerHasKey())
-                {
-                    textMeshProUGUI.text = "[E] Unlock"; // บอกปุ่มด้วยจะดีมาก
-                }
+                    textMeshProUGUI.text = "[E] Unlock";
                 else
-                {
                     textMeshProUGUI.text = "Locked";
-                }
             }
         }
     }
 
-    // ✅ แก้ไข 2: เพิ่มฟังก์ชันปิดข้อความเมื่อเดินออก
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))

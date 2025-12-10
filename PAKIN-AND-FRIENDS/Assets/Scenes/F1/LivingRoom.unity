@@ -374,6 +374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e20bb6ec0998ed4daa12acb69e6e09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectID: Cabinet_JumpScare_09
   GJ: {fileID: 1680540377}
   GJ1: {fileID: 140296816}
   pickUpAllowed: 0
@@ -752,7 +753,6 @@ GameObject:
   - component: {fileID: 349593265}
   - component: {fileID: 349593264}
   - component: {fileID: 349593263}
-  - component: {fileID: 349593266}
   m_Layer: 8
   m_Name: IMG_8306
   m_TagString: Untagged
@@ -788,6 +788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyID: proom
+  icon: {fileID: 21300000, guid: 5b58696a2ed38d0439564da79a67a9d3, type: 3}
 --- !u!60 &349593264
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -907,19 +908,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &349593266
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 349593261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36c98fc1feafa50418908775065277a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueItemID: proom
 --- !u!1 &452734087
 GameObject:
   m_ObjectHideFlags: 0
@@ -1345,74 +1333,6 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.53, y: 3.94, z: 0}
   m_LocalScale: {x: 0.17232907, y: 0.17232907, z: 0.17232907}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &579482049
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 579482052}
-  - component: {fileID: 579482051}
-  - component: {fileID: 579482050}
-  m_Layer: 0
-  m_Name: EventSystem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &579482050
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 579482049}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
---- !u!114 &579482051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 579482049}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
-  m_DragThreshold: 10
---- !u!4 &579482052
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 579482049}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -3863,6 +3783,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e20bb6ec0998ed4daa12acb69e6e09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectID: Cabinet_JumpScare_10
   GJ: {fileID: 786490153}
   GJ1: {fileID: 857710241}
   pickUpAllowed: 0
@@ -4777,8 +4698,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33be9e4abbfaf5548a9dce5b102aae05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healAmount: 5
+  healAmount: 30
   destroyOnUse: 1
+  icon: {fileID: 0}
 --- !u!60 &2125218117
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -4917,7 +4839,6 @@ SceneRoots:
   - {fileID: 1722897617}
   - {fileID: 849401443}
   - {fileID: 1661483005}
-  - {fileID: 579482052}
   - {fileID: 722069134}
   - {fileID: 2109861297}
   - {fileID: 1764699156}

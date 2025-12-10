@@ -72,13 +72,7 @@ public class SceneStateData
 {
     // ลิสต์เก็บชื่อประตูที่เปิดไปแล้ว
     public List<string> openedDoors = new List<string>(); 
-    
-    // ลิสต์เก็บ ID ของ JumpScare ที่เล่นไปแล้ว
     public List<string> playedJumpScare = new List<string>();
-
-    // ✅✅✅ ส่วนสำคัญที่ต้องตรวจสอบ/แก้ไข ✅✅✅
-    // ต้องแน่ใจว่ามันถูกประกาศเป็น List<string>
-    public List<string> collectedItems = new List<string>(); 
-    // ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 }
+
 }

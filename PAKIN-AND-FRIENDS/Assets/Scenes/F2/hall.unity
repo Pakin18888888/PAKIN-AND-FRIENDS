@@ -594,9 +594,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e20bb6ec0998ed4daa12acb69e6e09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectID: Cabinet_JumpScare_05
   GJ: {fileID: 1952054806}
   GJ1: {fileID: 1979423739}
-  pickUpAllowed: 0
+  pickUpAllowed: 1
   hasGhost: 0
   isJumpScareCabinet: 1
   ghostSpawned: 0
@@ -1695,6 +1696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e20bb6ec0998ed4daa12acb69e6e09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectID: Cabinet_JumpScare_07
   GJ: {fileID: 1952054806}
   GJ1: {fileID: 1979423739}
   pickUpAllowed: 0
@@ -2305,6 +2307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e20bb6ec0998ed4daa12acb69e6e09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectID: Cabinet_JumpScare_06
   GJ: {fileID: 1717238997}
   GJ1: {fileID: 1979423739}
   pickUpAllowed: 0

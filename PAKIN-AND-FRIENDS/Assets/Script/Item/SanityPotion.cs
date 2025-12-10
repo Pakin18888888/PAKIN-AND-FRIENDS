@@ -10,6 +10,8 @@ public class SanityPotion : MonoBehaviour , IInteractable
     [Header("Pickup Settings")]
     public bool destroyOnUse = true;
 
+    public Sprite icon;
+
     public void OnInteract()
     {
         Debug.Log("ใช้ยาเพิ่มสติ!");
