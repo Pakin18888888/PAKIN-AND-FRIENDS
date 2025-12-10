@@ -269,6 +269,7 @@ GameObject:
   m_Component:
   - component: {fileID: 242868444}
   - component: {fileID: 242868443}
+  - component: {fileID: 242868445}
   m_Layer: 0
   m_Name: IMG_2415
   m_TagString: Untagged
@@ -343,6 +344,68 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &242868445
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242868442}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 32, y: 18}
+    newSize: {x: 3.2, y: 1.8}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -7.234375, y: 6.828125}
+      - {x: -9.328125, y: 0.359375}
+      - {x: -9.328125, y: -1.875}
+      - {x: -6.8125, y: -1.828125}
+      - {x: -6.78125, y: -1.796875}
+      - {x: -6.738783, y: 3.7244074}
+      - {x: 7.629877, y: 3.775399}
+      - {x: 7.6381073, y: -6.0456653}
+      - {x: -6.781768, y: -6.138711}
+      - {x: -6.836922, y: -3.5564651}
+      - {x: -9.328125, y: -3.5311518}
+      - {x: -9.328125, y: -3.6875}
+      - {x: -9.296875, y: -3.71875}
+      - {x: -6.921875, y: -6.296875}
+      - {x: -6.890625, y: -6.328125}
+      - {x: 8.125, y: -6.328125}
+      - {x: 8.125, y: 6.828125}
+  m_UseDelaunayMesh: 0
 --- !u!1 &424152415
 GameObject:
   m_ObjectHideFlags: 0
