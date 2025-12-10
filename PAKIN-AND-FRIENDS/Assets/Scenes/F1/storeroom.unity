@@ -395,7 +395,7 @@ GameObject:
   m_Component:
   - component: {fileID: 228289919}
   - component: {fileID: 228289920}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 9-Sliced
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -907,7 +907,8 @@ GameObject:
   m_Component:
   - component: {fileID: 585624735}
   - component: {fileID: 585624736}
-  m_Layer: 7
+  - component: {fileID: 585624737}
+  m_Layer: 8
   m_Name: IMG_2622
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -949,7 +950,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -981,6 +982,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!111 &585624737
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585624734}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: ec9d0fde32f71b24f8cda113e4f20d2b, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &599048998
 GameObject:
   m_ObjectHideFlags: 0
@@ -1135,9 +1151,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2648928436531625322, guid: 3f31c3ed082e30946ad307736f130e58, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3210433242921579028, guid: 3f31c3ed082e30946ad307736f130e58, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3210433242921579028, guid: 3f31c3ed082e30946ad307736f130e58, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245512557950911897, guid: 3f31c3ed082e30946ad307736f130e58, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1348,13 +1376,13 @@ GameObject:
   m_Component:
   - component: {fileID: 654724335}
   - component: {fileID: 654724334}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: IMG_2459
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &654724334
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2643,12 +2671,12 @@ MonoBehaviour:
   GJ: {fileID: 241470067}
   GJ1: {fileID: 654724333}
   pickUpAllowed: 0
-  hasGhost: 1
+  hasGhost: 0
   isJumpScareCabinet: 0
   ghostSpawned: 0
   ghostPrefab: {fileID: 6088588945290487277, guid: 7f274fe6af06d894bbb9c9bd65aefb90, type: 3}
   ghostSpawnDistance: 4
-  useJumpScare: 1
+  useJumpScare: 0
   jumpScare: {fileID: 1013511061}
 --- !u!1 &1187206365
 GameObject:
@@ -3886,7 +3914,8 @@ GameObject:
   - component: {fileID: 1875799080}
   - component: {fileID: 1875799079}
   - component: {fileID: 1875799082}
-  m_Layer: 7
+  - component: {fileID: 1875799083}
+  m_Layer: 8
   m_Name: IMG_2621
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3920,7 +3949,7 @@ Animator:
   m_GameObject: {fileID: 1875799077}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3674b1149db124e4787835ad0dcacddd, type: 2}
+  m_Controller: {fileID: 9100000, guid: a088036f9fea5934c83544ae5b782c7f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -4041,9 +4070,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1875799079}
-  stateName: End
+  triggerName: Play
   nextSceneName: HomeMenu
-  descriptionText: "\u0E15\u0E23\u0E27\u0E08\u0E2A\u0E2D\u0E1A"
+--- !u!111 &1875799083
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875799077}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: ec9d0fde32f71b24f8cda113e4f20d2b, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 1
+  m_CullingType: 0
 --- !u!1 &1887451441
 GameObject:
   m_ObjectHideFlags: 0
@@ -4188,7 +4231,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1990021516}
   - component: {fileID: 1990021517}
-  m_Layer: 7
+  - component: {fileID: 1990021518}
+  m_Layer: 8
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4262,6 +4306,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!111 &1990021518
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990021515}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: ec9d0fde32f71b24f8cda113e4f20d2b, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &2025512116
 GameObject:
   m_ObjectHideFlags: 0
