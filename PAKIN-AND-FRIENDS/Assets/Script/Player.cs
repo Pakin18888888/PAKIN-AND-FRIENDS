@@ -9,6 +9,9 @@ public class Player : MonoBehaviour
     [Header("ตั้งค่าการเคลื่อนที่")]
     public float moveSpeed = 5f;
     public bool canMove = true;
+
+    [Header("Footstep Sound")]
+    public AudioSource footstepSource;
     
     [Header("ตั้งค่าสถานะตัวละคร")]
     public int hp = 100;
@@ -121,6 +124,20 @@ public class Player : MonoBehaviour
                 animator.SetFloat("InputY", moveInput.y);
                 animator.SetFloat("LastInputX", moveInput.x);
                 animator.SetFloat("LastInputY", moveInput.y);
+            }
+        }
+        // 🔊 ระบบเสียงเท้า
+        if (footstepSource != null)
+        {
+            if (isMoving && canMove)
+            {
+                if (!footstepSource.isPlaying)
+                    footstepSource.Play();
+            }
+            else
+            {
+                if (footstepSource.isPlaying)
+                    footstepSource.Stop();
             }
         }
     }
