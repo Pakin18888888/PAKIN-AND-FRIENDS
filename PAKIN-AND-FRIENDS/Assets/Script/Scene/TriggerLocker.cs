@@ -41,7 +41,7 @@ public class TriggerLocker : MonoBehaviour
         promptText.text = isLocked ? "[E] Unlock" : "[E] Lock";
     }
 
-    void ToggleLock()
+     void ToggleLock()
     {
         isLocked = !isLocked;
 
@@ -52,11 +52,14 @@ public class TriggerLocker : MonoBehaviour
 
             if (isLocked)
             {
-                // เข้าตู้
+                // เข้าตู้ (ซ่อนตัว)
                 if (hidePoint != null)
                     Player.Instance.transform.position = hidePoint.position;
                 sp.enabled = false;
                 boxCollider2D.enabled = false;
+
+                // 🔥 เพิ่มตรงนี้: สั่งให้ Player ขยายแสงเมื่อเข้าตู้
+                Player.Instance.ChangeLightRadius(Player.Instance.newLightRadius + 4f); // เพิ่มรัศมีไปอีก 4
             }
             else
             {
@@ -66,9 +69,9 @@ public class TriggerLocker : MonoBehaviour
                 sp.enabled = true;
                 boxCollider2D.enabled = true;
                 
-                // 🔥 เพิ่มบรรทัดนี้: เมื่อออกมาแล้ว ถ้าจุดออกอยู่นอก Collider ให้รีเซ็ตค่าทิ้งเลย
-                // เพื่อป้องกันบั๊กกดซ้ำ
-                // แต่ปกติ OnTriggerExit จะทำงานให้อัตโนมัติเมื่อเดินออกไป
+                // 🔥 เพิ่มตรงนี้: สั่งให้ Player ลดแสงกลับไปเป็นค่าปกติ
+                // (ต้องสร้างค่า default ใน Player.cs ก่อน)
+                Player.Instance.ResetLightRadius(); 
             }
         }
 

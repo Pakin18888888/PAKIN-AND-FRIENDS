@@ -33,8 +33,8 @@ public class Player : MonoBehaviour
 
     [Header("Flashlight Settings")]
     public Light2D playerLight; // ลาก Component Light 2D ของผู้เล่นมาใส่ช่องนี้
-    public float newLightRadius = 8.0f; // ขนาดรัศมีแสงที่จะใหญ่ขึ้น
-
+    public float baseLightRadius = 3.0f; // 🔥 ค่าแสงปกติ (ก่อนเก็บไฟฉาย)
+    public float newLightRadius = 6.0f; // ขนาดรัศมีแสงที่จะใหญ่ขึ้น (หลังจากเก็บไฟฉาย)
     void Awake()
     {
         // ตั้งค่า Singleton
@@ -145,7 +145,6 @@ public class Player : MonoBehaviour
         if (currentLocker != null && isHiding)
         {
             currentLocker.OnPlayerInteracting();
-            newLightRadius = 6f;
             return; 
         }
 
@@ -213,13 +212,30 @@ public class Player : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, interactionRange);
     }
 
+    public void ChangeLightRadius(float targetRadius)
+    {
+        if (playerLight != null)
+        {
+            // ใช้ค่าที่ส่งมาเป็นรัศมีใหม่ทันที
+            playerLight.pointLightOuterRadius = targetRadius;
+            Debug.Log($"ปรับแสงเป็น: {targetRadius}");
+        }
+    }
+
     public void EnableFlashlight()
     {
         if (playerLight != null)
         {
-            // ปรับขนาดแสง (Outer Radius คือวงนอกสุด)
-            playerLight.pointLightOuterRadius = newLightRadius;
-            Debug.Log("แสงสว่างขึ้นแล้ว!");
+            // ปรับแสงเป็นค่าที่อัปเกรดแล้ว
+            ChangeLightRadius(newLightRadius);
+            Debug.Log("เก็บไฟฉายแล้ว! แสงกว้างขึ้น");
         }
+    }
+
+    // 🔥 ฟังก์ชันสำหรับลดแสงกลับมาเป็นค่าเริ่มต้น
+    public void ResetLightRadius()
+    {
+        // ใช้ค่าที่กำหนดไว้ใน baseLightRadius
+        ChangeLightRadius(baseLightRadius);
     }
 }

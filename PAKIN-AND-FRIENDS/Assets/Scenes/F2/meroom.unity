@@ -2442,6 +2442,7 @@ MonoBehaviour:
   sceneState:
     openedDoors: []
     playedJumpScare: []
+    collectedItems: []
   nextSpawnID: 
 --- !u!4 &1712769705
 Transform:
@@ -3100,6 +3101,7 @@ GameObject:
   - component: {fileID: 2089530166}
   - component: {fileID: 2089530168}
   - component: {fileID: 2089530169}
+  - component: {fileID: 2089530170}
   m_Layer: 8
   m_Name: IMG_8307
   m_TagString: Untagged
@@ -3260,6 +3262,19 @@ PolygonCollider2D:
       - {x: 5.29, y: -5.93}
       - {x: 5.91, y: -5.3199997}
   m_UseDelaunayMesh: 0
+--- !u!114 &2089530170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2089530164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36c98fc1feafa50418908775065277a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueItemID: Flashlight
 --- !u!1 &2094307479
 GameObject:
   m_ObjectHideFlags: 0
