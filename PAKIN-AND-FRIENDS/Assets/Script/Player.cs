@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.Universal;
 
 public class Player : MonoBehaviour
@@ -57,11 +58,20 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        // ถ้ายังไม่ได้ลาก Inventory มาใส่ ให้ลองหาเองจากในฉาก
-        if (inventory == null)
-        {
-            inventory = FindObjectOfType<Inventory>();
-        }
+        // ซีนที่ไม่ต้องให้ Player อยู่
+    string[] noPlayerScenes = {"CutEndScene" };
+
+    string currentScene = SceneManager.GetActiveScene().name;
+
+    if (System.Array.Exists(noPlayerScenes, scene => scene == currentScene))
+    {
+        Destroy(gameObject);
+        return;
+    }
+
+    // หาของในฉาก
+    if (inventory == null)
+        inventory = FindObjectOfType<Inventory>();
     }
 
     void Update()

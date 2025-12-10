@@ -4,8 +4,6 @@ using UnityEngine.SceneManagement;
 
 public class ClickPlayAnimationChangeScene : MonoBehaviour
 {
-    public Animator animator;
-    public string triggerName = "Play";
     public string nextSceneName;
 
     private bool clicked = false;
@@ -15,15 +13,7 @@ public class ClickPlayAnimationChangeScene : MonoBehaviour
         if (clicked) return;
         clicked = true;
 
-        Debug.Log("Object clicked!");
-
-        animator.SetTrigger(triggerName);
-        StartCoroutine(WaitForAnimation());
-    }
-
-    IEnumerator WaitForAnimation()
-    {
-        yield return new WaitForSeconds(1.5f); // ตั้งตามความยาวคลิป
+        Debug.Log("Clicked! Changing scene to: " + nextSceneName);
         SceneManager.LoadScene(nextSceneName);
     }
 }

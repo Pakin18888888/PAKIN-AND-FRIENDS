@@ -41,6 +41,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/F1/storeroom.unity
     guid: 70ff1b0cd9d65164e9072aea5f468ca3
+  - enabled: 1
+    path: Assets/Scenes/CutEndScene.unity
+    guid: b805f997e69f9ef42be1a89a65c9822a
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 5c8356ce105db03409b4120fc660a195, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 97dc693d594724d4fa039385336ad037, type: 3}
