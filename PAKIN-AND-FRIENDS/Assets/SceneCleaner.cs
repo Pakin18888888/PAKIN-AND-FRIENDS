@@ -12,6 +12,8 @@ public class SceneCleaner : MonoBehaviour
 
         GameObject  b = GameObject.Find("GlobalAudioManager");
         if (b != null) Destroy(b);
+        GameObject  b1 = GameObject.Find("GameOverUI");
+        if (b1 != null) Destroy(b1);
 
         GameObject  gamemaneger = GameObject.Find("GameManeger");
         if (gamemaneger != null) Destroy(gamemaneger);
