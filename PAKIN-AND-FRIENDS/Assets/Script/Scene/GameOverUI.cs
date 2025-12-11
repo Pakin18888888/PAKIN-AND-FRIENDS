@@ -9,12 +9,11 @@ public class GameOverUI : MonoBehaviour
     public GameObject gameOverPanel;
 
     [Header("Sound")]
-    public AudioSource gameOverSound;   // ลากเสียง Game Over ใส่
-    public bool destroyExistingUI = true;
-    public bool destroyAudioObjects = true;
+    public AudioSource gameOverSound;
 
     void Awake()
     {
+        // ป้องกัน GameOverUI ซ้ำ
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -25,88 +24,113 @@ public class GameOverUI : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-
     void Start()
     {
-        gameOverPanel.SetActive(false);
-    }
-
-    // ===========================================
-    // เรียกตอนเกิด Game Over
-    // ===========================================
-    public void ShowGameOver()
-    {
-        Debug.Log("📌 GAMEOVER UI SHOWED");
-
-        // 1. ลบ UI ซ้ำซ้อน (ถ้ามี)
-        if (destroyExistingUI)
-            RemoveDuplicateUI();
-
-        // 2. ปิดเสียงเก่าที่ค้าง (ถ้ามี)
-        if (destroyAudioObjects)
-            RemoveAudioObjects();
-
-        // 3. แสดง Panel
-        if (gameOverPanel != null)
-            gameOverPanel.SetActive(true);
-
-        // 4. เล่นเสียง GameOver
-        if (gameOverSound != null)
-            gameOverSound.Play();
-    }
-
-    // ===========================================
-    // ปุ่ม Restart
-    // ===========================================
-    public void RestartGame()
-    {
-        Debug.Log("🔄 Restarting...");
-
-        SceneManager.LoadScene("StartScene");
-
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
     }
 
-    // ===========================================
-    // ปุ่ม Quit
-    // ===========================================
-    public void QuitGame()
+    // ======================================================
+    //  SHOW GAME OVER
+    // ======================================================
+    public void ShowGameOver()
     {
-        Application.Quit();
+        Debug.Log("📌 GAMEOVER SHOWN");
+
+        // ลบ UI ทั้งหมดใน Scene ปัจจุบัน (ยกเว้น GameOverUI)
+        RemoveAllSceneUI();
+
+        // ปิดเสียงทุกอันในเกมก่อน
+        StopAllAudioSources();
+
+        // เล่นเสียง GameOver
+        if (gameOverSound != null)
+            gameOverSound.Play();
+
+        // แสดง UI
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(true);
+
+        // ปิดการควบคุม Player
+        if (Player.Instance != null)
+            Player.Instance.canMove = false;
     }
 
-    // ===========================================
-    // ล้าง UI ซ้ำใน DontDestroyOnLoad
-    // ===========================================
-    void RemoveDuplicateUI()
+    // ======================================================
+    //  รีทั้งเกมแบบ CLEAN RESET
+    // ======================================================
+    public void ResetEntireGame()
     {
-        GameOverUI[] all = FindObjectsOfType<GameOverUI>();
+        Debug.Log("🔄 RESET ENTIRE GAME");
 
-        foreach (var ui in all)
+        // ลบทุกวัตถุ DontDestroyOnLoad ยกเว้น GameOverUI
+        DestroyAllDDOLExceptGameOver();
+
+        // ล้าง Static references
+        Player.Instance = null;
+        sanitySystem.Instance = null;
+        GameManager.Instance = null;
+        Inventory.Instance = null;
+
+        // โหลด Scene เริ่มต้น
+        SceneManager.LoadScene("meroom");
+
+        // ปิด UI GameOver
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(false);
+    }
+
+    // ======================================================
+    //  ฟังก์ชันลบ UI ทั้งหมดให้เหลือแค่ GameOverUI
+    // ======================================================
+    void RemoveAllSceneUI()
+    {
+        Canvas[] canvases = FindObjectsOfType<Canvas>();
+
+        foreach (var cv in canvases)
         {
-            if (ui != Instance)
+            if (cv.gameObject != this.gameOverPanel &&
+                cv.gameObject != this.gameObject)
             {
-                Debug.Log("🗑 ลบ GameOverUI ซ้ำ: " + ui.gameObject.name);
-                Destroy(ui.gameObject);
+                Debug.Log("🗑 ลบ UI ใน Scene: " + cv.gameObject.name);
+                Destroy(cv.gameObject);
             }
         }
     }
 
-    // ===========================================
-    // ล้าง Object เสียงที่พกมาหลายอัน
-    // ===========================================
-    void RemoveAudioObjects()
+    // ======================================================
+    //  ปิดเสียงทั้งหมด
+    // ======================================================
+    void StopAllAudioSources()
     {
-        AudioSource[] sources = FindObjectsOfType<AudioSource>();
+        AudioSource[] audios = FindObjectsOfType<AudioSource>();
 
-        foreach (var src in sources)
+        foreach (var a in audios)
         {
-            if (src.gameObject != this.gameObject &&
-                src != gameOverSound)
+            if (a != gameOverSound)
             {
-                Debug.Log("🗑 ลบเสียงที่ไม่จำเป็น: " + src.gameObject.name);
-                Destroy(src.gameObject);
+                a.Stop();
+                Destroy(a.gameObject);
+            }
+        }
+    }
+
+    // ======================================================
+    //  ลบ DDOL ทั้งหมด ยกเว้น GameOverUI
+    // ======================================================
+    void DestroyAllDDOLExceptGameOver()
+    {
+        var allObjects = FindObjectsOfType<GameObject>();
+
+        foreach (var obj in allObjects)
+        {
+            if (obj.scene.name == null || obj.scene.name == "")
+            {
+                if (obj != this.gameObject)
+                {
+                    Debug.Log("🗑 ลบ DDOL: " + obj.name);
+                    Destroy(obj);
+                }
             }
         }
     }

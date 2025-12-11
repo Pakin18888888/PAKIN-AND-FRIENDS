@@ -6,6 +6,10 @@ public class KeyItem : MonoBehaviour, IInteractable
     public string keyID;
     public Sprite icon;
 
+    [Header("Sound")]
+    public AudioClip pickUpSound;
+    public AudioSource audioSource;
+
     void Start()
     {
         if (Inventory.Instance != null &&
@@ -16,12 +20,24 @@ public class KeyItem : MonoBehaviour, IInteractable
     }
 
     public void OnInteract()
+{
+    Inventory.Instance.AddItem(keyID, icon, 1);
+
+    PlayPickupSoundDetached();
+
+    Destroy(gameObject); // ลบทันที
+}
+
+void PlayPickupSoundDetached()
+{
+    if (pickUpSound == null) return;
+    AudioSource.PlayClipAtPoint(pickUpSound, transform.position, 1f);
+}
+
+    void PlayPickupSound()
     {
-        Inventory.Instance.AddItem(keyID, icon, 1);
-
-        Debug.Log("เก็บกุญแจ " + keyID);
-
-        Destroy(gameObject);
+        if (audioSource != null && pickUpSound != null)
+            audioSource.PlayOneShot(pickUpSound);
     }
 
     public string GetDescription()

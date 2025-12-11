@@ -1,17 +1,18 @@
 using UnityEngine;
-using System.Linq;
-using TMPro;
 
 public class TriggerDoor : MonoBehaviour
 {
     public string doorID; 
-    
-    [Header("สถานะ")]
     public bool isLocked = true;
 
     private Collider2D doorCollider; 
     private SpriteRenderer spriteRenderer;
-    public TextMeshProUGUI textMeshProUGUI;
+
+    [Header("UI")]
+    public TMPro.TextMeshProUGUI textMeshProUGUI;
+
+    [Header("Sound")]
+    public AudioSource doorSound;  // ← ใส่เสียงประตูที่นี่
 
     void Awake()
     {
@@ -21,9 +22,8 @@ public class TriggerDoor : MonoBehaviour
 
     void Start()
     {
-        if (textMeshProUGUI != null) textMeshProUGUI.gameObject.SetActive(false);
+        textMeshProUGUI.gameObject.SetActive(false);
 
-        // เช็คว่าเคยเปิดไปแล้วหรือยัง (Save System)
         if (GameManager.Instance != null)
         {
             if (GameManager.Instance.sceneState.openedDoors.Contains(doorID))
@@ -31,8 +31,6 @@ public class TriggerDoor : MonoBehaviour
         }
     }
 
-    // ❌ ลบ Update() ทิ้งไปเลย เพราะ Player.cs จะเป็นคนเรียกฟังก์ชันนี้เองเมื่อกด E
-    
     public void UnlockAndOpen()
     {
         if (!isLocked) return;
@@ -40,35 +38,29 @@ public class TriggerDoor : MonoBehaviour
         if (CheckIfPlayerHasKey())
         {
             Debug.Log("ไขกุญแจสำเร็จ: " + doorID);
-            
-            // ✅ ลบกุญแจออกจากกระเป๋า
-            if (Inventory.Instance != null)
-            {
-                Inventory.Instance.RemoveItem(doorID, 1);
-            }
-
             isLocked = false;
             OpenDoor();
-
-            // ปิด UI ทันทีที่เปิดได้
-            if (textMeshProUGUI != null) textMeshProUGUI.gameObject.SetActive(false);
         }
         else
         {
             Debug.Log("ไม่มีกุญแจสำหรับประตู: " + doorID);
-            // ใส่เสียงประตู [Locked] ตรงนี้
         }
     }
 
     bool CheckIfPlayerHasKey()
     {
         if (Inventory.Instance == null) return false;
-        return Inventory.Instance.items.Any(item => item.id == doorID);
+        
+        return Inventory.Instance.HasItem(doorID);
     }
 
     public void OpenDoor()
     {
-        // บันทึกว่าเปิดแล้ว
+        // เล่นเสียงประตู 🔊
+        if (doorSound != null)
+            doorSound.Play();
+
+        // บันทึกสถานะเปิดประตู
         if (GameManager.Instance != null)
         {
             if (!GameManager.Instance.sceneState.openedDoors.Contains(doorID))
@@ -87,7 +79,6 @@ public class TriggerDoor : MonoBehaviour
 
     void OpenAnimation()
     {
-        // ใส่ Animation เปิดประตู / เล่นเสียงเปิด
         if (doorCollider) doorCollider.enabled = false;
         if (spriteRenderer) spriteRenderer.enabled = false;
     }
@@ -96,18 +87,11 @@ public class TriggerDoor : MonoBehaviour
     {
         if (!isLocked) return;
 
-        // แสดง UI เมื่อเดินชน (แต่ยังไม่กด E)
         if (collision.CompareTag("Player"))
         {
-            if (textMeshProUGUI != null)
-            {
-                textMeshProUGUI.gameObject.SetActive(true);
+            textMeshProUGUI.gameObject.SetActive(true);
 
-                if (CheckIfPlayerHasKey())
-                    textMeshProUGUI.text = "[E] Unlock";
-                else
-                    textMeshProUGUI.text = "Locked";
-            }
+            textMeshProUGUI.text = CheckIfPlayerHasKey() ? "[E] Unlock" : "Locked";
         }
     }
 
@@ -115,10 +99,7 @@ public class TriggerDoor : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            if (textMeshProUGUI != null)
-            {
-                textMeshProUGUI.gameObject.SetActive(false);
-            }
+            textMeshProUGUI.gameObject.SetActive(false);
         }
     }
 }

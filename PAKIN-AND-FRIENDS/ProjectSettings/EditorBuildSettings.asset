@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/F2/meroom.unity
     guid: 86002801cd7f3d841be4eea99dc7d631
   - enabled: 1
+    path: Assets/Scenes/F2/mamaroom.unity
+    guid: aa0296ed0e275844f865e78c317cf0af
+  - enabled: 1
     path: Assets/Scenes/CutScene.unity
     guid: 9210ab60e19bf3a4d8ec928d7d924ae9
   - enabled: 1
@@ -20,9 +23,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/F2/proom.unity
     guid: 8eba5172b4418be47ad6c495c51c856d
-  - enabled: 1
-    path: Assets/Scenes/F2/mamaroom.unity
-    guid: 14ea67ecf72a75049a49c3cbe36d56b7
   - enabled: 1
     path: Assets/Scenes/F2/hall.unity
     guid: 26f5f4df4bdcd6940b44470d9f89c5d7
