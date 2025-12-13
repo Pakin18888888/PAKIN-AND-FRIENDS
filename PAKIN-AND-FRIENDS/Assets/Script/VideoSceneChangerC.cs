@@ -20,8 +20,8 @@ public class VideoSceneChangerC : MonoBehaviour
     {
         Debug.Log("Video ended — resetting game...");
 
-        // ✔ 1. ลบทุกวัตถุ DontDestroyOnLoad
-        CleanupDontDestroyOnLoad();
+        // ✔ 1. ลบทุกวัตถุ DontDestroyOnLo
+CleanupDontDestroyOnLoad();
 
         // ✔ 2. โหลดซีนหลัก
         SceneManager.LoadScene(mainMenuSceneName);
@@ -40,5 +40,4 @@ public class VideoSceneChangerC : MonoBehaviour
                 Destroy(obj);
             }
         }
-    }
-}
+    }}

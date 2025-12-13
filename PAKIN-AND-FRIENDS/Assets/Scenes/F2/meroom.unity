@@ -2223,6 +2223,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameOverUI
       objectReference: {fileID: 0}
+    - target: {fileID: 3966869478354628816, guid: 7b1a27019c3d1bb45ab2b493c0e119e0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5104230305703707686, guid: 7b1a27019c3d1bb45ab2b493c0e119e0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1

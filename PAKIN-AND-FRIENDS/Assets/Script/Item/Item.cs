@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class Item : MonoBehaviour
 {
